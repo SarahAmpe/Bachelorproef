@@ -10,5 +10,5 @@ function [intensity] = planeScan(fullMat, x, z, D, c, arrSetup)
 arrElems = abs(arrSetup - x) <= D/2; % Array elements that matter
 time = 2*z/c; % Appropriate time
 signals = fullMat(arrElems, arrElems, time); % Signals that matter
-intensity = sum(signals);
+intensity = sum(sum(signals));
 end

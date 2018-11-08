@@ -1,5 +1,5 @@
 function [intensity] = tfm(fullMat ,x,z, c, arraySetup)
-trans = lenght(arraySetup);
+trans = length(arraySetup);
 intensity = 0;
 t = randomint(0,5);
 for transmitter = 1:trans

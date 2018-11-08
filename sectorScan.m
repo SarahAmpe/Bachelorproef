@@ -12,8 +12,6 @@ intensity = 0;
 for transmit = 1:size(fullMat, 1)
     for receive = 1:size(fullMat, 2)
         th = arctan(z/x) % Required beam steer angle with respect to the array normal
-        if th < 0:
-            th = th + pi
         xtx = arrSetup(transmit); % Transmitter position
         xrx = arrSetup(receive); % Receiver position
         time = 2*r + (xtx + xrx)*sin(th);

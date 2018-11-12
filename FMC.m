@@ -1,4 +1,4 @@
-function fmc = FMC(golfInfo,materiaalInfo,elementInfo)
+function [fmc,H] = FMC(golfInfo,materiaalInfo,elementInfo)
 
 % benoeming van alle verschillende parameters nodig voor het algoritme
 A = golfInfo(1);

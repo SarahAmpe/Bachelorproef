@@ -1,9 +1,9 @@
-function F = fourier2(signaal)
-% Fourriertransformatie adhv FFT
-% en met het opsplitsen van de reële rij in oneven en even deelrij om 
-% fft dubbel zo snel te laten werken 
+function F = fourier2(signal)
+% Fourriertransform based on FFT
+% and by dividing the real data in the odd and even subsequence to reduce
+% the computation time with a factor 2.
 
-f = signaal(1:2:end-1)+ 1i*signaal(2:2:end);
+f = signal(1:2:end-1)+ 1i*signal(2:2:end);
 X = fft(f);
 N = length(f)/2;
 F = zeros(2*N,1);

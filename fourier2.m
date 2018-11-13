@@ -5,13 +5,13 @@ function F = fourier2(signal)
 
 f = signal(1:2:end-1)+ 1i*signal(2:2:end);
 X = fft(f);
-N = length(f)/2;
-F = zeros(2*N,1);
-A = zeros(N,1);
-B = zeros(N,1);
-for n = 1:N
-    A(n) = (X(n)+conj(X(end-n)))/2;
-    B(n) = (X(n)-conj(X(end-n)))/(2i);
-    F(n) = A(n) + exp(pi*1i/N)*B(n);
-    F(N+n) = A(n) - exp(pi*1i/N)*B(n);
+N = length(signal);
+F = zeros(1,N);
+A = zeros(1,N/2);
+B = zeros(1,N/2);
+for n = 1:N/2
+    A(n) = (X(n)+conj(X(end-(n-1))))/2;
+    B(n) = (X(n)-conj(X(end-(n-1))))/(2i);
+    F(n) = A(n) + exp(2*pi*(n-1)*1i/N)*B(n);
+    F(N/2+n) = A(n) - exp(2*pi*(n-1)*1i/N)*B(n);
 end

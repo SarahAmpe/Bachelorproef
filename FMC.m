@@ -18,24 +18,25 @@ lambda = c/f;
 signal = wave(A,f,t);
 
 % Fourriertransform (FFT)
-F = fourier2(signal);
+N = length(t);
+F = fft(signal); 
 
 % intermediate calculations
 xt = (0:numElements-1)*pitch;  
 xr = xt';
 dt = sqrt((xref-xt).^2 + zref.^2);
 dr = sqrt((xref-xr).^2 + zref.^2);
-d = dt + dr;
+d = dt + dr
 
 pt = sinc(pi*elementWidth*((xref-xt)./dt)/lambda);
 pr = sinc(pi*elementWidth*((xref-xr)./dr)/lambda);
 A = A./sqrt(dr*dt);
 
 % complex spectrum of each transducer-receiver pair
-G = repmat(zeros(1),numElements,numElements,length(F)); % 3D matrices with zeros
+G = repmat(zeros(1),numElements,numElements,N); % 3D matrices with zeros
 H = G;
-for w=1:length(F)
-    G(:,:,w) = F(w).*exp(-1i*w/c*d);
+for w=1:N
+    G(:,:,w) = F(w).*exp(-1i*w*d/c);
     H = pr*pt.*A.*G(:,:,w);
 end
 S = H; % just to have a clear output

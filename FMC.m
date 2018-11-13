@@ -1,4 +1,4 @@
-function [fmc,H] = FMC(wavefInfo,materialInfo,elementInfo)
+function [fmc,S] = FMC(waveInfo,materialInfo,elementInfo)
 
 % parameters
 A = waveInfo(1);
@@ -38,6 +38,15 @@ for w=1:length(F)
     G(:,:,w) = F(w).*exp(-1i*w/c*d);
     H = pr*pt.*A.*G(:,:,w);
 end
+S = H; % just to have a clear output
 
 % complexe hilberttransform
-fmc = 1/pi*integrate(H,0,inf); % how? help.
+H = permute(H,[3,1,2]); % because function hilbert works columwise
+Hr = real(H); % because function hilbert only works with real input
+Hi = imag(H);
+Hr = imag(hilbert(Hr));
+Hi = imag(hilbert(Hi));
+H = Hr + 1i* Hi;
+
+fmc = permute(H,[2,3,1]);
+

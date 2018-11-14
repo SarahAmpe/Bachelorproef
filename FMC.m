@@ -26,7 +26,7 @@ xt = (0:numElements-1)*pitch;
 xr = xt';
 dt = sqrt((xref-xt).^2 + zref.^2);
 dr = sqrt((xref-xr).^2 + zref.^2);
-d = dt + dr
+d = dt + dr;
 
 pt = sinc(pi*elementWidth*((xref-xt)./dt)/lambda);
 pr = sinc(pi*elementWidth*((xref-xr)./dr)/lambda);

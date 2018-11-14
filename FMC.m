@@ -3,13 +3,13 @@ function [fmc,S] = FMC(waveInfo,materialInfo,elementInfo)
 % parameters
 A = waveInfo(1);
 f = waveInfo(2);
-t = waveInfo(3:end);
+t = waveInfo(3:end); %t zal toch als een arry meegegeven worden dus wss kan je hier enkel 3 zetten, lik anders ga je hier ook geen lijst maken ofzo hoe dat nu sta
 
 c = materialInfo(1);
-xref = materialInfo(2);
+xref = materialInfo(2); %Het punt waar we het defect vermoeden
 zref = materialInfo(3);
 
-numElements = elementInfo(1);
+numElements = elementInfo(1); %Ik vermoed dat dit hier de array setup is
 elementWidth = elementInfo(2);
 pitch = elementInfo(3);
 

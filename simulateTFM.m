@@ -1,10 +1,9 @@
-function result = simulateTFM(A, f, t, cMaterial, xref, zref, elementInfo, x, z)
-sample = wave(A,f,t);
-waveInfo = [A, f, sample];
+function result = simulateTFM(A, f, t, cMaterial, xref, zref, elementInfo)
+waveInfo = [A, f, t];
 materialInfo = [cMaterial, xref, zref];
 fmc,s = FMC(waveInfo, materialInfo, elementInfo);
 
 
-tada = tfm(fmc, x, z, elementInfo);
+tada = tfm(fmc, xref, zref, elementInfo);
 
 

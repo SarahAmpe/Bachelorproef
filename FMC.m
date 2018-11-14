@@ -1,4 +1,16 @@
 function [fmc,S] = FMC(waveInfo,materialInfo,elementInfo)
+% Function to simulate the full matrix capture of a phased array for a material with a given scatterpoint.
+
+% INPUT:
+% waveInfo = Amplitude, frequency and timesequence for the simulated signal (cosinuswave)
+% materialInfo = velocity of the wave in the material and x,y-coordinates ([xref,yref]) of the defect (poinscatterer)
+% elementInfo = number of elements, the width and the pitch of the elements in the array setup
+
+% OUTPUT:
+% S = a 3D-matrix with the resulting spectrum for each transmitter-receiver pair.
+%       (dimensions: transmitter, receiver, frequency)
+% fmc = 3D-matrix with the resulting time-domain signal for each transmitter-receiver pair obtained with the complex Hilbert transform.
+%       (dimensions: transmitter, receiver, time)
 
 % parameters
 A = waveInfo(1);
@@ -42,8 +54,8 @@ end
 S = H; % just to have a clear output
 
 % complexe hilberttransform
-H = permute(H,[3,1,2]); % because function hilbert works columwise
-Hr = real(H); % because function hilbert only works with real input
+H = permute(H,[3,1,2]); % because the function hilbert works columwise
+Hr = real(H); % because the function hilbert only works with real input
 Hi = imag(H);
 Hr = imag(hilbert(Hr));
 Hi = imag(hilbert(Hi));

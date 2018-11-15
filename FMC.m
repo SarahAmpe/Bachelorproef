@@ -34,7 +34,7 @@ N = length(t);
 F = fft(signal); 
 
 % intermediate calculations
-xt = (0:(numElements-1)) - (numElements-1)*ElementsWidth/2;  % x=0 is the centrum of the phased array
+xt = (0:(numElements-1)) - (numElements-1)*elementWidth/2;  % x=0 is the centrum of the phased array
 xr = xt';
 dt = sqrt((xref-xt).^2 + zref.^2);
 dr = sqrt((xref-xr).^2 + zref.^2);
@@ -48,7 +48,7 @@ A = A./sqrt(dr*dt);
 G = repmat(zeros(1),numElements,numElements,N); % 3D matrices with zeros
 H = G;
 for w=1:N
-    G(:,:,w) = F(w).*exp(-1i*(2*pi/t(w))*d/c);
+    G(:,:,w) = F(w).*exp(-1i*(2*pi/t(w))*d/c); % problem in the middle of the frequency domain
     H(:,:,w) = pr*pt.*A.*G(:,:,w);
 end
 S = H; % just to have a clear output

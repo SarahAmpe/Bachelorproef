@@ -10,4 +10,4 @@ function signal = wave(A,f,t)
 % signal = gaussian windowed cosinus signal.
 
 wave = A*cos(f*t);
-signal = exp(-1/2*t.^2).*wave;
+signal = exp(-1/2*(t-mean(t)).^2).*wave;

@@ -34,14 +34,14 @@ N = length(t);
 F = fft(signal); 
 
 % intermediate calculations
-xt = (0:numElements-1)*pitch;  
+xt = (0:(numElements-1)) - (numElements-1)*ElementsWidth/2;  % x=0 is the centrum of the phased array
 xr = xt';
 dt = sqrt((xref-xt).^2 + zref.^2);
 dr = sqrt((xref-xr).^2 + zref.^2);
 d = dt + dr;
 
-pt = sinc(pi*elementWidth*((xref-xt)./dt)/lambda);
-pr = sinc(pi*elementWidth*((xref-xr)./dr)/lambda);
+pt = sinc(pi*elementWidth*(abs(xt - xref)./dt)/lambda);
+pr = sinc(pi*elementWidth*(abs(xr - xref)./dr)/lambda);
 A = A./sqrt(dr*dt);
 
 % complex spectrum of each transducer-receiver pair
@@ -49,11 +49,11 @@ G = repmat(zeros(1),numElements,numElements,N); % 3D matrices with zeros
 H = G;
 for w=1:N
     G(:,:,w) = F(w).*exp(-1i*w*d/c);
-    H = pr*pt.*A.*G(:,:,w);
+    H(:,:,w) = pr*pt.*A.*G(:,:,w);
 end
 S = H; % just to have a clear output
 
-% complexe hilberttransform
+% complex hilberttransform
 H = permute(H,[3,1,2]); % because the function hilbert works columwise
 Hr = real(H); % because the function hilbert only works with real input
 Hi = imag(H);

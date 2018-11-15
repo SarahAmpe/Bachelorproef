@@ -48,7 +48,7 @@ A = A./sqrt(dr*dt);
 G = repmat(zeros(1),numElements,numElements,N); % 3D matrices with zeros
 H = G;
 for w=1:N
-    G(:,:,w) = F(w).*exp(-1i*w*d/c);
+    G(:,:,w) = F(w).*exp(-1i*(2*pi/t(w))*d/c);
     H(:,:,w) = pr*pt.*A.*G(:,:,w);
 end
 S = H; % just to have a clear output

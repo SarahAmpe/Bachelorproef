@@ -20,6 +20,6 @@ fmc(:,:,3) % deze matrix staat vol (wss door de NaN waarde in S)
 % laten we nu eens handmatig rij 201 van S uitrekenen:
 G(:,:,201) = F(201).*exp(-1i*(2*pi/t(201))*d/c);
 G(:,:,201) % geen NaN's
-S(:,:,201) = pr*pt.*A.*G(:,:,201); % exact zelfde formules als in FMC
-S(:,:,201) % deze waarden worden wel berkend
+H(:,:,201) = pr*pt.*A.*G(:,:,201); % exact zelfde formules als in FMC
+H(:,:,201) % deze waarden worden wel berkend
 

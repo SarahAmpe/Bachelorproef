@@ -3,6 +3,7 @@ t = 0.01:0.01:4;
 plot(t,wave(2,4*pi,t));
 
 %% FMC invoerwaardes en testing
+t = 0.01:0.01:4;
 c = 3*10^6;
 xref = 2;
 zref = 2;
@@ -17,14 +18,18 @@ elementInfo = [numElements,elementWidth,pitch];
 
 %% TFM testing
 arraySetup = (0:(numElements-1)) - (numElements-1)*elementWidth/2;
-x = xref;
-z = zref;
-I = tfm(fmc, x, z, c, arraySetup);
-
+for m = 1:numElements
+    for n = 1:numElements
+        x = (m-1)- (numElements-1)*elementWidth/2;
+        z = (n-1);
+        I(n,m) = tfm(fmc,t, x, z, c, arraySetup);
+    end
+end
+imagesc(I)
 %% planeScan testing
 x = xref;
 z = zref;
-D = 
+
 I = planeScan(fmc, x, z,D , c, arrSetup)
 
 

@@ -13,7 +13,7 @@ waveInfo = [2,2*pi,t];
 materialInfo = [c,xref,zref];
 elementInfo = [numElements,elementWidth,pitch];
 
-[fmc,S,F,d,pr,pt,A] = FMC(waveInfo,materialInfo,elementInfo);
+[fmc,S] = FMC(waveInfo,materialInfo,elementInfo);
 
 %% TFM testing
 I = zeros(20);

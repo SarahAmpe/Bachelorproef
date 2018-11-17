@@ -1,4 +1,4 @@
-function [fmc,S,F,d,pr,pt,A] = FMC(waveInfo,materialInfo,elementInfo)
+function [fmc,S] = FMC(waveInfo,materialInfo,elementInfo)
 % Function to simulate the full matrix capture of a phased array for a material with a given scatterpoint.
 
 % INPUT:

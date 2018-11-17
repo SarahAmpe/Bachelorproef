@@ -24,7 +24,8 @@ I = tfm(fmc, x, z, c, arraySetup);
 %% planeScan testing
 x = xref;
 z = zref;
-I = planeScan(fmc, x, z, D, c, arrSetup)
+D = 
+I = planeScan(fmc, x, z,D , c, arrSetup)
 
 
 

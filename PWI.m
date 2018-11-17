@@ -25,5 +25,14 @@ m = repmat(zeros(1),number,N,N);
 for w=1:W
     m(:,:,w) = (H*exp(-1j*(2*pi/t(w))*tau))';
 end
-
 M = m;
+
+% complex hilberttransform
+M = permute(M,[3,1,2]); 
+Mr = real(M);
+Mi = imag(M);
+Mr = imag(hilbert(Mr));
+Mi = imag(hilbert(Mi));
+M = Mr + 1i* Mi;
+
+PWI = permute(M,[2,3,1]);

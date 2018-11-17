@@ -1,4 +1,16 @@
-function [fmc,S] = FMC(waveInfo,materialInfo,elementInfo)
+function [fmc,S,F,d,pr,pt,A] = FMC(waveInfo,materialInfo,elementInfo)
+% Function to simulate the full matrix capture of a phased array for a material with a given scatterpoint.
+
+% INPUT:
+% waveInfo = Amplitude, frequency and timesequence for the simulated signal (cosinuswave)
+% materialInfo = velocity of the wave in the material and x,y-coordinates ([xref,yref]) of the defect (poinscatterer)
+% elementInfo = number of elements, the width and the pitch of the elements in the array setup
+
+% OUTPUT:
+% S = a 3D-matrix with the resulting spectrum for each transmitter-receiver pair.
+%       (dimensions: transmitter, receiver, frequency)
+% fmc = 3D-matrix with the resulting time-domain signal for each transmitter-receiver pair obtained with the complex Hilbert transform.
+%       (dimensions: transmitter, receiver, time)
 
 % parameters
 A = waveInfo(1);
@@ -22,28 +34,28 @@ N = length(t);
 F = fft(signal); 
 
 % intermediate calculations
-xt = (0:numElements-1)*pitch;  
+xt = (0:(numElements-1)) - (numElements-1)*elementWidth/2;  % x=0 is the centrum of the phased array
 xr = xt';
 dt = sqrt((xref-xt).^2 + zref.^2);
 dr = sqrt((xref-xr).^2 + zref.^2);
 d = dt + dr;
 
-pt = sinc(pi*elementWidth*((xref-xt)./dt)/lambda);
-pr = sinc(pi*elementWidth*((xref-xr)./dr)/lambda);
+pt = sinc(pi*elementWidth*(abs(xt - xref)./dt)/lambda);
+pr = sinc(pi*elementWidth*(abs(xr - xref)./dr)/lambda);
 A = A./sqrt(dr*dt);
 
 % complex spectrum of each transducer-receiver pair
 G = repmat(zeros(1),numElements,numElements,N); % 3D matrices with zeros
 H = G;
 for w=1:N
-    G(:,:,w) = F(w).*exp(-1i*w*d/c);
-    H = pr*pt.*A.*G(:,:,w);
+    G(:,:,w) = F(w).*exp(-1i*(2*pi/t(w))*d/c); % problem in the middle of the frequency domain
+    H(:,:,w) = pr*pt.*A.*G(:,:,w);
 end
 S = H; % just to have a clear output
 
-% complexe hilberttransform
-H = permute(H,[3,1,2]); % because function hilbert works columwise
-Hr = real(H); % because function hilbert only works with real input
+% complex hilberttransform
+H = permute(H,[3,1,2]); % because the function hilbert works columwise
+Hr = real(H); % because the function hilbert only works with real input
 Hi = imag(H);
 Hr = imag(hilbert(Hr));
 Hi = imag(hilbert(Hi));

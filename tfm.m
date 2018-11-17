@@ -15,6 +15,7 @@ for transmitter = 1:trans
         time = sqrt((xtx-x)^2+z^2) + sqrt((xrx-x)^2+z^2);
         time = time/c;
         [fout, time] = min(abs(t-time));
+        time
         intensity = intensity + fullMat(transmitter,receiver,time);
     end
 end

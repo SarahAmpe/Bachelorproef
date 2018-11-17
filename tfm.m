@@ -8,11 +8,11 @@ function [intensity] = tfm(fullMat ,x,z, c, arraySetup)
 
 trans = length(arraySetup);
 intensity = 0;
-t = randomint(0,5);
+t = 2;
 for transmitter = 1:trans
     for receiver = 1:trans
         xtx = arraySetup(transmitter);
-        xrx = arraySetup(receive);
+        xrx = arraySetup(receiver);
         time = sqrt((xtx-x)^2+z^2) + sqrt((xrx-x)^2+z^2);
         time = time/c;
         intensity = intensity + fullMat(transmitter,receiver,t)*time;

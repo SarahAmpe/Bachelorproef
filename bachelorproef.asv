@@ -9,7 +9,7 @@ materialInfo = [c,2,2];
 elementInfo = [4,1,2];
 
 [fmc,S,F,d,pr,pt,A] = FMC(waveInfo,materialInfo,elementInfo);
-array = [-2, -1, 0, 1];
+array[[
 I = tfm(fmc, 1, 2, c, array);
 
 % fout in het programma:

@@ -33,6 +33,7 @@ signal = wave(A,f,t);
 N = length(t);
 F = fft(signal); 
 
+
 % intermediate calculations
 xt = (0:(numElements-1)) - (numElements-1)*elementWidth/2;  % x=0 is the centrum of the phased array
 xr = xt';
@@ -45,7 +46,7 @@ pr = sinc(pi*elementWidth*(abs(xr - xref)./dr)/lambda);
 A = A./sqrt(dr*dt);
 
 % complex spectrum of each transducer-receiver pair
-G = repmat(zeros(1),numElements,numElements,N); % 3D matrices with zeros
+G = repmat(zeros(numElements),1,1,N); % 3D matrices with zeros
 H = G;
 for w=1:N
     G(:,:,w) = F(w).*exp(-1i*(2*pi/t(w))*d/c); % problem in the middle of the frequency domain

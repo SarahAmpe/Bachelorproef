@@ -12,16 +12,4 @@ elementInfo = [4,1,2];
 array = [-2, -1, 0, 1];
 I = tfm(fmc, 1, 2, c, array);
 
-% fout in het programma:
-
-% dit is de output:
-S(:,:,1) % dit is oke voor gelijk welke waarde (buiten 201)
-%S(:,:,201) % dit zijn NaN's (alleen voor 201)
-fmc(:,:,3) % deze matrix staat vol (wss door de NaN waarde in S)
-
-% laten we nu eens handmatig rij 201 van S uitrekenen:
-%G(:,:,201) = F(201).*exp(-1i*(2*pi/t(201))*d/c);
-%G(:,:,201) % geen NaN's
-%H(:,:,201) = pr*pt.*A.*G(:,:,201); % exact zelfde formules als in FMC
-%H(:,:,201) % deze waarden worden wel berkend
 

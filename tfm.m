@@ -14,8 +14,9 @@ for transmitter = 1:trans
         xrx = arraySetup(receiver);
         time = sqrt((xtx-x)^2+z^2) + sqrt((xrx-x)^2+z^2);
         time = time/c;
-        [fout, time] = min(abs(t-time));
-        intensity = intensity + fullMat(transmitter,receiver,time);
+        lowerTime = floor(time,2);
+        upperTime = ceil(time,2);
+        intensity = intensity + (fullMat(transmitter,receiver,lowerTime) + fullMat(transmitter,receiver,upperTime))/2;
     end
 end
 intensity = abs(intensity);

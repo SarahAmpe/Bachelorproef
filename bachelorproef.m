@@ -1,5 +1,5 @@
 %% testing van de wave functie:
-t = 0.01:0.005:4;
+t = 0.01:0.01:4;
 plot(t,wave(2,4*pi,t));
 
 %% FMC invoerwaardes en testing

@@ -12,11 +12,16 @@ for transmitter = 1:trans
     for receiver = 1:trans
         xtx = arraySetup(transmitter);
         xrx = arraySetup(receiver);
-        time = sqrt((xtx-x)^2+z^2) + sqrt((xrx-x)^2+z^2)
-        time = time/c
-        lowerTime = floor(time*100)/100
-        upperTime = ceil(time*100)/100
-        intensity = intensity + (fullMat(transmitter,receiver,lowerTime*100) + fullMat(transmitter,receiver,upperTime*100))/2;
+        time = sqrt((xtx-x)^2+z^2) + sqrt((xrx-x)^2+z^2);
+        time = time/c;
+        lowerTime = floor(time*100)/100;
+        upperTime = ceil(time*100)/100;
+        if lowerTime ==0
+            lowerTime = t(1);
+        elseif upperTime >= t(end)
+            upperTime = t(end);
+        end
+        intensity = intensity + (fullMat(transmitter,receiver,round(lowerTime*100)) + fullMat(transmitter,receiver,round(upperTime*100)))/2;
     end
 end
 intensity = abs(intensity);

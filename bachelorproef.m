@@ -1,11 +1,11 @@
 %% testing van de wave functie:
-t = 0.01:0.00125:1;
+t = 0.01:0.01:4; % niet aanpassen! tfm is hiervan afhankelijk
 plot(t,wave(2,4*pi,t));
 
 %% FMC invoerwaardes en testing
 c = 200;
-xref = 0;
-zref = 5;
+xref = -7;
+zref = 3;
 numElements = 20;
 elementWidth = 1;
 pitch = 1.5;

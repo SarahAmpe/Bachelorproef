@@ -1,5 +1,5 @@
 function [fmc,S] = FMC(waveInfo,materialInfo,elementInfo)
-% FMC Simulates the full matrix capture of a phased array for a material with a given scatterpoint.
+% FMC simulates the full matrix capture of a phased array for a material with a given scatterpoint.
 %
 % INPUT:
 % waveInfo     = Amplitude, frequency and timesequence for the simulated signal (cosine wave)
@@ -15,13 +15,13 @@ function [fmc,S] = FMC(waveInfo,materialInfo,elementInfo)
 % Parameters
 A = waveInfo(1);
 f = waveInfo(2);
-t = waveInfo(3:end); %t zal toch als een array meegegeven worden dus wss kan je hier enkel 3 zetten, lik anders ga je hier ook geen lijst maken ofzo hoe dat nu sta
+t = waveInfo(3:end);
 
 c = materialInfo(1);
-xref = materialInfo(2); %Het punt waar we het defect vermoeden
+xref = materialInfo(2); % Defect
 zref = materialInfo(3);
 
-numElements = elementInfo(1); %Ik vermoed dat dit hier de array setup is
+numElements = elementInfo(1); 
 elementWidth = elementInfo(2);
 pitch = elementInfo(3);
 
@@ -48,10 +48,10 @@ A = A./sqrt(dr*dt); % Signal amplitude after propagation
 G = zeros(numElements, numElements, N); % 3D matrix with zeros
 H = G;
 for w = 1:N
-    G(:,:,w) = F(w).*exp(-1i*(2*pi/t(w))*d/c); % problem in the middle of the frequency domain
+    G(:,:,w) = F(w).*exp(-1i*(2*pi/t(w))*d/c); 
     H(:,:,w) = pr*pt.*A.*G(:,:,w);
 end
-S = H; % just to have a clear output
+S = H; % needed for input of PWI
 
 % Time-domain signal for each transmitter-receiver pair
 H = permute(H,[3,1,2]); % because the function hilbert works columnwise

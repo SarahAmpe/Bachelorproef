@@ -37,4 +37,3 @@ colorbar
 % z = zref;
 % 
 % I = planeScan(fmc, x, z,D , c, arrSetup)
-

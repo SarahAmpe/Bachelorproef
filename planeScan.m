@@ -1,6 +1,7 @@
 function [intensity] = planeScan(fullMat, t, x, z, D, c, arrSetup)
 % Calculates intensity of the plane B-scan image at (x,z)
 % Input fullMat = full matrix of time domain signals
+%       t = time sequence of fullMat
 %       x = position of the point of interest along the array axis
 %       z = position of the point of interest normal to the array surface
 %       D = aperture width
@@ -17,5 +18,5 @@ elseif upperTime >= t(end)
     upperTime = t(end);
 end
 signals = (fullMat(arrElems, arrElems, round(lowerTime*100)) + fullMat(arrElems, arrElems, round(upperTime*100)))/2; % Signals that matter
-intensity = sum(sum(signals));
+intensity = abs(sum(sum(signals)));
 end

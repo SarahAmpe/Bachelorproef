@@ -1,5 +1,5 @@
 %% testing van de wave functie:
-t = 0.01:0.005:4;
+t = 0.01:0.00125:1;
 plot(t,wave(2,4*pi,t));
 
 %% FMC invoerwaardes en testing
@@ -26,8 +26,8 @@ for m = -10:10
     for n = 0:0.5:10
         step_z = step_z + 1;
         x = m;
-        z = n;
-        I(step_x, step_z) = tfm(fmc,t, x, z, c, arraySetup);
+        z = n/2;
+        I(step_z, step_x) = tfm(fmc,t, x, z, c, arraySetup);
     end
 end
 imagesc(-10:10,0:0.5:10,I)

@@ -75,7 +75,30 @@ for m = 1:aantalx+1
     for n = 1:aantalz+1
         x = xmin + (m-1)*stepx;
         z = zmin + (n-1)*stepz; 
-        I(n,m) = sectorScan(fmc,t, x, z, c, arraySetup);
+        I(n,m) = sectorScan(fmc,t, x, z, c, arraySetup); % nog probleem omdat time soms negatief wordt...
+    end
+end
+imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)
+colorbar
+
+%% focusedScan testing
+D = 5*pitch;
+
+I = zeros(20);
+arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
+aantalx= 20;% nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz= 20;
+xmin = -(numElements-1)*pitch/2;
+xmax = (numElements-1)*pitch/2;
+zmin = 0.05;
+zmax = 1;
+stepx = (numElements-1)*pitch/aantalx;
+stepz = (zmax-zmin)/aantalx;
+for m = 1:aantalx+1
+    for n = 1:aantalz+1
+        x = xmin + (m-1)*stepx;
+        z = zmin + (n-1)*stepz; 
+        I(n,m) = focusedScan(fmc, t, x, z, D, c, arraySetup);
     end
 end
 imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)

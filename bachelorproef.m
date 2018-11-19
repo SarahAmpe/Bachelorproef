@@ -23,17 +23,33 @@ step_z = 0;
 for m = -10:10
     step_x = step_x +1;
     step_z = 0;
-    for n = 0:0.5:10
+    for n = 0.5:0.5:10.5
         step_z = step_z + 1;
         x = m;
         z = n/2;
         I(step_z, step_x) = tfm(fmc,t, x, z, c, arraySetup);
     end
 end
-imagesc(-10:10,0:0.5:10,I)
+imagesc(-10:10,0.5:0.5:10.5,I)
 colorbar
-% %% planeScan testing
-% x = xref;
-% z = zref;
-% 
-% I = planeScan(fmc, x, z,D , c, arrSetup)
+
+%% planeScan testing
+x = xref;
+z = zref;
+arraySetup = (0:(numElements-1)) - (numElements-1)*elementWidth/2;
+D = 5*pitch;
+I = zeros(20);
+step_x = 0;
+step_z = 0;
+for m = -10:10
+    step_x = step_x +1;
+    step_z = 0;
+    for n = 0.5:0.5:10.5
+        step_z = step_z + 1;
+        x = m;
+        z = n/2;
+        I(step_z, step_x) = planeScan(fmc, t, x, z, D, c, arraySetup);
+    end
+end
+imagesc(-10:10,0.5:0.5:10.5,I)
+colorbar

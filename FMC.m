@@ -61,5 +61,5 @@ Hr = imag(hilbert(Hr));
 Hi = imag(hilbert(Hi));
 H = Hr + 1i* Hi;
 
-fmc = permute(H,[2,3,1]);
+fmc = abs(permute(H,[2,3,1]));
 

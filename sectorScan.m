@@ -17,14 +17,11 @@ for transmit = 1:size(fullMat, 1)
         xrx = arrSetup(receive); % Receiver position
         time = 2*r + (xtx + xrx)*sin(th); 
         time = time/c;
-        lowerTime = floor(time*100)/100;
-        upperTime = ceil(time*100)/100;
-        if lowerTime ==0
-            lowerTime = t(1);
-        elseif upperTime >= t(end)
-            upperTime = t(end);
-        end
-        intensity = intensity + (fullMat(transmit, receive, round(lowerTime*100))+ fullMat(transmit, receive, round(upperTime*100)))/2;
+        [lowerTime,upperTime] = time2(t,time);
+        lowerSignal = fullMat(transmit, receive, lowerTime);
+        upperSignal = fullMat(transmit, receive, upperTime);
+        signals = (lowerSignal + upperSignal)/2; 
+        intensity = intensity + signals;
     end
 end
 

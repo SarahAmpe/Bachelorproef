@@ -12,14 +12,7 @@ function [intensity] = planeScan(fullMat, sampleTimes, x, z, D, c, arrSetup)
 
 arrElems = abs(arrSetup - x) <= D/2; % Array elements that matter
 time = 2*z/c; % Appropriate time
-
-if any(sampleTimes <= time)
-    lowerTime = find(sampleTimes <= time, 1, 'last'); % Largest lower bound in time sequence of fullMat
-else
-    lowerTime = 1;
-end
-upperTime = min(lowerTime+1, length(sampleTimes)); % Smallest upper bound in the time sequence of fullMat
-
+[lowerTime,upperTime] = time2(t,time);
 lowerSignal = fullMat(arrElems, arrElems, lowerTime);
 upperSignal = fullMat(arrElems, arrElems, upperTime);
 signals = (lowerSignal + upperSignal)/2; % Linearly interpolating time

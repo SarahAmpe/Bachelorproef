@@ -16,15 +16,12 @@ for transmit = 1:size(subMat, 1)
     for receive = 1:size(subMat, 2)
         xtx = arrSetup(transmit); % Transmitter position
         xrx = arrSetup(receive); % Receiver position
-        time = ( sqrt((xtx-x)^2 + z^2) + sqrt((xrx-x)^2 + z^2) )/c
-        lowerTime = floor(time*100)/100;
-        upperTime = ceil(time*100)/100;
-        if lowerTime ==0
-            lowerTime = t(1);
-        elseif upperTime >= t(end)
-            upperTime = t(end);
-        end
-        intensity = intensity + (subMat(transmit, receive, round(lowerTime*100)) +  subMat(transmit, receive, round(upperTime*100)))/2;
+        time = ( sqrt((xtx-x)^2 + z^2) + sqrt((xrx-x)^2 + z^2) )/c;
+        [lowerTime,upperTime] = time2(t,time);
+        lowerSignal = subMat(transmit, receive, lowerTime);
+        upperSignal = subMat(transmit, receive, upperTime);
+        signals = (lowerSignal + upperSignal)/2; 
+        intensity = intensity + signals;
     end
 end
 

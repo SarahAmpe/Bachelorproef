@@ -1,4 +1,4 @@
-function [intensity] = planeScan(fullMat, sampleTimes, x, z, D, c, arrSetup)
+function [intensity] = planeScan(fullMat,t, x, z, D, c, arrSetup)
 % PLANESCAN Calculates intensity of the plane B-scan image at (x,z)
 %
 % INPUT: 
@@ -13,8 +13,10 @@ function [intensity] = planeScan(fullMat, sampleTimes, x, z, D, c, arrSetup)
 arrElems = abs(arrSetup - x) <= D/2; % Array elements that matter
 time = 2*z/c; % Appropriate time
 [lowerTime,upperTime] = time2(t,time);
+[~,lowerTime] = min(abs(t-time));
 lowerSignal = fullMat(arrElems, arrElems, lowerTime);
 upperSignal = fullMat(arrElems, arrElems, upperTime);
+upperSignal = lowerSignal;
 signals = (lowerSignal + upperSignal)/2; % Linearly interpolating time
 
 intensity = abs(sum(sum(signals)));

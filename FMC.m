@@ -31,10 +31,11 @@ lambda = c/f;
 signal = wave(A,f,t);
 N = length(t);
 F = fft(signal); 
+freq = (0:N-1)/N/(t(2)-t(1));
 
 
 % Calculating propagation distance, directivity functions and signal amplitude
-xt = (0:(numElements-1)) - (numElements-1)*elementWidth/2;  % x=0 is the centre of the phased array
+xt = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);  % x=0 is the centre of the phased array
 xr = xt';
 dt = sqrt((xref-xt).^2 + zref.^2);
 dr = sqrt((xref-xr).^2 + zref.^2);
@@ -48,7 +49,7 @@ A = A./sqrt(dr*dt); % Signal amplitude after propagation
 G = zeros(numElements, numElements, N); % 3D matrix with zeros
 H = G;
 for w = 1:N
-    G(:,:,w) = F(w).*exp(-1i*(2*pi/t(w))*d/c); 
+    G(:,:,w) = F(w).*exp(-1i*(2*pi*freq(w))*d/c); 
     H(:,:,w) = pr*pt.*A.*G(:,:,w);
 end
 S = H; % needed for input of PWI

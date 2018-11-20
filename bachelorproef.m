@@ -1,9 +1,9 @@
 %% FMC input (+ test wavefunctie)
 t = linspace(1e-6, 1e-5, 1000); % niet aanpassen! tfm is hiervan afhankelijk
 plot(t,wave(2,5e6,t));
-c = 3e6;
-xref = 5;
-zref = 5;
+c = 5e6;
+xref = -5;
+zref = 10;
 numElements = 64;
 elementWidth = 0.53;
 pitch = 0.63;
@@ -25,7 +25,7 @@ xmax = (numElements-1)*pitch/2;
 zmin = 0.01;
 zmax = 10;
 stepx = (numElements-1)*pitch/aantalx;
-stepz = (zmax-zmin)/aantalx;
+stepz = (zmax-zmin)/aantalz;
 for m = 1:aantalx+1
     for n = 1:aantalz+1
         x = xmin + (m-1)*stepx;
@@ -33,7 +33,7 @@ for m = 1:aantalx+1
         I(n,m) = planeScan(fmc, t, x, z, D, c, arraySetup);
     end
 end
-imagesc(xmin:stepx:xmax, zmin:stepz:zmax, I)
+imagesc(xmin:stepx:xmax, (zmin:stepz:zmax), I)
 colorbar
 
 %% sectorScan testing
@@ -45,7 +45,7 @@ aantalz= 20;
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
 zmin = 0.05;
-zmax = 1;
+zmax = 10;
 stepx = (numElements-1)*pitch/aantalx;
 stepz = (zmax-zmin)/aantalx;
 for m = 1:aantalx+1

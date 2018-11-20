@@ -10,13 +10,23 @@ function [intensity] = planeScan(fullMat, t, x, z, D, c, arrSetup)
 
 arrElems = abs(arrSetup - x) <= D/2; % Array elements that matter
 time = 2*z/c; % Appropriate time
-lowerTime = floor(time*100)/100;
-upperTime = ceil(time*100)/100;
-if lowerTime ==0
-    lowerTime = t(1);
-elseif upperTime >= t(end)
-    upperTime = t(end);
+%lowerTime = floor(time*100)/100;
+%upperTime = ceil(time*100)/100;
+%if lowerTime ==0
+%    lowerTime = t(1);
+%elseif upperTime >= t(end)
+%    upperTime = t(end);
+%end
+if any(t <= time)
+    lowerTime = find(t <= time, 1, 'last');
+else
+    lowerTime = 1;
 end
-signals = (fullMat(arrElems, arrElems, round(lowerTime*100)) + fullMat(arrElems, arrElems, round(upperTime*100)))/2; % Signals that matter
+upperTime = min(lowerTime+1, length(t));
+
+lowerSignal = fullMat(arrElems, arrElems, lowerTime);
+upperSignal = fullMat(arrElems, arrElems, upperTime);
+signals = (lowerSignal + upperSignal)/2; % Linearly interpolating time
+
 intensity = abs(sum(sum(signals)));
 end

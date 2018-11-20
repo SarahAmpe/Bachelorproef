@@ -1,6 +1,6 @@
 %% FMC input (+ test wavefunctie)
 t = linspace(1e-6, 1e-5, 1000); % niet aanpassen! tfm is hiervan afhankelijk
-plot(t,wave(2,4*pi,t));
+plot(t,wave(2,5e6,t));
 c = 3e6;
 xref = 5;
 zref = 5;

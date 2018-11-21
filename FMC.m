@@ -30,7 +30,7 @@ lambda = c/f;
 % Construction of the signal and its Fouriertransform (via FFT)
 signal = wave(A,f,t);
 N = length(t);
-F = fft(signal); 
+F = fft(signal,2*N); 
 freq = (0:N-1)/N/(t(2)-t(1));
 
 
@@ -56,11 +56,14 @@ S = H; % needed for input of PWI
 
 % Time-domain signal for each transmitter-receiver pair
 H = permute(H,[3,1,2]); % because the function hilbert works columnwise
-Hr = real(H); % because the function hilbert only works with real input
-Hi = imag(H);
-Hr = imag(hilbert(Hr));
-Hi = imag(hilbert(Hi));
-H = Hr + 1i* Hi;
+% Hr = real(H); % because the function hilbert only works with real input
+% Hi = imag(H);
+% Hr = imag(hilbert(Hr));
+% Hi = imag(hilbert(Hi));
+% H = Hr + 1i* Hi;
 
+H = ifft(H);
+H = imag(hilbert(real(H)));
+%H = reshape(envelope(reshape(real(H),1000,numElements^2)),1000,numElements,numElements);
 fmc = abs(permute(H,[2,3,1]));
 

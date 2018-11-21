@@ -1,9 +1,9 @@
 %% FMC input (+ test wavefunctie)
-t = linspace(1e-6, 1e-5, 1000); % niet aanpassen! tfm is hiervan afhankelijk
+t = linspace(-1e-5, 1e-5, 1000); % niet aanpassen! tfm is hiervan afhankelijk
 plot(t,wave(2,5e6,t));
-c = 5e6;
+c = 7e6;
 xref = -5;
-zref = 10;
+zref = 2;
 numElements = 64;
 elementWidth = 0.53;
 pitch = 0.63;
@@ -13,7 +13,7 @@ elementInfo = [numElements,elementWidth,pitch];
 
 [fmc,S] = FMC(waveInfo,materialInfo,elementInfo);
 
-%% planeScan testing
+% planeScan testing
 D = 5*pitch;
 
 I = zeros(20);

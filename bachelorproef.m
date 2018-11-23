@@ -13,7 +13,7 @@ elementInfo = [numElements,elementWidth,pitch];
 
 [fmc,S] = FMC(waveInfo,materialInfo,elementInfo);
 
-% planeScan testing
+%% planeScan testing
 D = 5*pitch;
 
 I = zeros(20);

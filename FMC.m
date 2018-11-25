@@ -1,5 +1,5 @@
 function [fmc,S] = FMC(waveInfo,materialInfo,elementInfo)
-% FMC Simulates the full matrix capture of a phased array for a material with a given scatterpoint.
+% FMC simulates the full matrix capture of a phased array for a material with a given scatterpoint.
 %
 % INPUT:
 % waveInfo     = Amplitude, frequency and timesequence for the simulated signal (cosine wave)
@@ -15,13 +15,13 @@ function [fmc,S] = FMC(waveInfo,materialInfo,elementInfo)
 % Parameters
 A = waveInfo(1);
 f = waveInfo(2);
-t = waveInfo(3:end); %t zal toch als een array meegegeven worden dus wss kan je hier enkel 3 zetten, lik anders ga je hier ook geen lijst maken ofzo hoe dat nu sta
+t = waveInfo(3:end);
 
 c = materialInfo(1);
-xref = materialInfo(2); %Het punt waar we het defect vermoeden
+xref = materialInfo(2); % Defect
 zref = materialInfo(3);
 
-numElements = elementInfo(1); %Ik vermoed dat dit hier de array setup is
+numElements = elementInfo(1); 
 elementWidth = elementInfo(2);
 pitch = elementInfo(3);
 
@@ -30,11 +30,12 @@ lambda = c/f;
 % Construction of the signal and its Fouriertransform (via FFT)
 signal = wave(A,f,t);
 N = length(t);
-F = fft(signal); 
+F = fft(signal,2*N); 
+freq = (0:N-1)/N/(t(2)-t(1));
 
 
 % Calculating propagation distance, directivity functions and signal amplitude
-xt = (0:(numElements-1)) - (numElements-1)*elementWidth/2;  % x=0 is the centre of the phased array
+xt = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);  % x=0 is the centre of the phased array
 xr = xt';
 dt = sqrt((xref-xt).^2 + zref.^2);
 dr = sqrt((xref-xr).^2 + zref.^2);
@@ -48,18 +49,21 @@ A = A./sqrt(dr*dt); % Signal amplitude after propagation
 G = zeros(numElements, numElements, N); % 3D matrix with zeros
 H = G;
 for w = 1:N
-    G(:,:,w) = F(w).*exp(-1i*(2*pi/t(w))*d/c); % problem in the middle of the frequency domain
+    G(:,:,w) = F(w).*exp(-1i*(2*pi*freq(w))*d/c); 
     H(:,:,w) = pr*pt.*A.*G(:,:,w);
 end
-S = H; % just to have a clear output
+S = H; % needed for input of PWI
 
 % Time-domain signal for each transmitter-receiver pair
 H = permute(H,[3,1,2]); % because the function hilbert works columnwise
-Hr = real(H); % because the function hilbert only works with real input
-Hi = imag(H);
-Hr = imag(hilbert(Hr));
-Hi = imag(hilbert(Hi));
-H = Hr + 1i* Hi;
+% Hr = real(H); % because the function hilbert only works with real input
+% Hi = imag(H);
+% Hr = imag(hilbert(Hr));
+% Hi = imag(hilbert(Hi));
+% H = Hr + 1i* Hi;
 
-fmc = permute(H,[2,3,1]);
+H = ifft(H);
+H = imag(hilbert(real(H)));
+%H = reshape(envelope(reshape(real(H),1000,numElements^2)),1000,numElements,numElements);
+fmc = abs(permute(H,[2,3,1]));
 

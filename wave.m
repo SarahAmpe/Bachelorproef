@@ -9,5 +9,5 @@ function signal = wave(A,f,t)
 % OUTPUT:
 % signal = gaussian windowed cosinus signal.
 
-wave = A*cos(f*t);
-signal = exp(-1/2*(t-mean(t)).^2).*wave;
+wave = A*cos(2*pi*f*t);
+signal = gausswin(length(wave),5)'.*wave;

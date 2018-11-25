@@ -1,6 +1,7 @@
 function [intensity] = tfm(fullMat,t,x,z, c, arraySetup)
 % Calculates intensity of the Total Focusing Method at (x,z)
 % Input fullMat = full matrix of time domain signals
+%       t = time sequence of fullMat
 %       x = position of the point of interest along the array axis
 %       z = position of the point of interest normal to the array surface
 %       c = sound speed in the medium
@@ -14,11 +15,10 @@ for transmitter = 1:trans
         xrx = arraySetup(receiver);
         time = sqrt((xtx-x)^2+z^2) + sqrt((xrx-x)^2+z^2);
         time = time/c;
-        lowerTime = floor(time,2);
-        upperTime = ceil(time,2);
-        intensity = intensity + (fullMat(transmitter,receiver,lowerTime) + fullMat(transmitter,receiver,upperTime))/2;
+        [lowerTime,upperTime] = time2(t,time);
+        lowerSignal = fullMat(transmitter, receiver, lowerTime);
+        upperSignal = fullMat(transmitter, receiver, upperTime);
+        signals = (lowerSignal + upperSignal)/2; % Linearly interpolating time
+        intensity = intensity + signals;
     end
-end
-intensity = abs(intensity);
-        
 end

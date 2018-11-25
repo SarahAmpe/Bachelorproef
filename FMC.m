@@ -40,8 +40,8 @@ dt = sqrt((xref-xt).^2 + zref.^2);
 dr = sqrt((xref-xr).^2 + zref.^2);
 d = dt + dr; % Propagation distance
 
-pt = sinc(pi*elementWidth*(abs(xt - xref)./dt)/lambda); % Transmit directivity function
-pr = sinc(pi*elementWidth*(abs(xr - xref)./dr)/lambda); % Receive directivity function
+pt = sin(c*(pi*elementWidth*(abs(xt - xref)./dt)/lambda)); % Transmit directivity function
+pr = sin(c*(pi*elementWidth*(abs(xr - xref)./dr)/lambda)); % Receive directivity function
 A = A./sqrt(dr*dt); % Signal amplitude after propagation
 
 % Complex spectrum for each transmitter-receiver pair

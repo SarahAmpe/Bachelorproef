@@ -17,11 +17,11 @@ A = waveInfo(1);
 f = waveInfo(2);
 t = waveInfo(3:end);
 
-c = materialInfo(1);
-c_a = c(1);
-c_b = c(2);
-c_c = c(3); %When considering longitudinal? waves these velocities will be the same
-c_d = c(4);
+c = materialInfo(1)
+c_a = c(1,1);
+c_b = c(1,2);
+c_c = c(1,3); %When considering longitudinal? waves these velocities will be the same
+c_d = c(1,4);
 xref = materialInfo(2); % Defect
 zref = materialInfo(3);
 z_in = materialInfo(4); %Thickness of first material

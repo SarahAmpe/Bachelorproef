@@ -9,7 +9,7 @@ numElements = 64;
 elementWidth = 0.53;
 pitch = 0.63;
 waveInfo = [1, 5e6,t];
-materialInfo = [c,xref,zref, z_in];
+materialInfo = [xref,zref, z_in,c];
 elementInfo = [numElements,elementWidth,pitch];
 
 [fmc,S] = FMC_multiple(waveInfo,materialInfo,elementInfo);

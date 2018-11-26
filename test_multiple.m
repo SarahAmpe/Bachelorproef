@@ -36,5 +36,6 @@ for m = 1:aantalx+1
 end
 imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)
 colorbar
-hold on 
-plot(
+hold on
+plot([xmin,xmax],[z_in,z_in],'r','LineWidth',2)
+hold off

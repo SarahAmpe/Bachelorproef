@@ -3,7 +3,7 @@ function [fmc,S] = FMC_multiple(waveInfo,materialInfo,elementInfo)
 %
 % INPUT:
 % waveInfo     = Amplitude, frequency and timesequence for the simulated signal (cosine wave)
-% materialInfo = Velocity of the wave in the materials ([c_a, c_b, c_c, c_d]) and x,y-coordinates ([xref,yref]) of the defect (pointscatterer)
+% materialInfo = x,y-Coordinates ([xref,yref]) of the defect (pointscatterer) and velocity of the wave in the materials ([c_a, c_b, c_c, c_d])
 % elementInfo  = Number of elements, the width and the pitch of the elements in the array setup
 %
 % OUTPUT:
@@ -17,20 +17,22 @@ A = waveInfo(1);
 f = waveInfo(2);
 t = waveInfo(3:end);
 
-c = materialInfo(1)
-c_a = c(1,1);
-c_b = c(1,2);
-c_c = c(1,3); %When considering longitudinal? waves these velocities will be the same
-c_d = c(1,4);
-xref = materialInfo(2); % Defect
-zref = materialInfo(3);
-z_in = materialInfo(4); %Thickness of first material
+
+xref = materialInfo(1); % Defect
+zref = materialInfo(2);
+z_in = materialInfo(3); %Thickness of first material
+c = materialInfo(4:end);
+c_a = c(1);
+c_b = c(2);
+%c_c = c(3); %When considering longitudinal? waves these velocities will be the same
+%c_d = c(4);
 
 numElements = elementInfo(1); 
 elementWidth = elementInfo(2);
 pitch = elementInfo(3);
 
-lambda = c/f;
+lambda1 = c_a/f;
+lambda2 = c_b/f;
 
 % Construction of the signal and its Fouriertransform (via FFT)
 signal = wave(A,f,t);
@@ -42,26 +44,40 @@ freq = (0:N-1)/N/(t(2)-t(1));
 % Calculating propagation distance, directivity functions and signal amplitude
 xt = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);  % x=0 is the centre of the phased array
 xr = xt';
-func = @(x) c_a/c_b*((x-xt)*((x-xt).^2 + z_in^2)^(-1/2) - (x_ref - x)*((x_ref -x)^2 + (z_ref-z_in)^2)^(-1/2));
 x = xt;
-x_in = fzero(func, x); %Position where ingoing wave transits into the other material 
+x_in = zeros(1,numElements);
+for n = 1:numElements
+    func = @(x) c_b/c_a*((x-xt(n))*((x-xt(n))^2 + z_in^2)^(-1/2)) - (xref - x)*((xref -x)^2 + (zref-z_in)^2)^(-1/2);
+    x_in(n) = fzero(func, x(n)); %Position where ingoing wave transits into the other material 
+end
 
-func = @(x) c_b/c_a*((x-x_ref)*((x-x_ref)^2 - (z_ref-z_in)^2)^(-1/2) - (xr-x)*((xr-x).^2 + z_in^2));
 x = xr;
-x_out = fzero(func, x); %Position where outgoing wave transits into the other material 
+x_out = zeros(numElements,1);
+for n = 1:numElements
+    func = @(x) c_a/c_b*((x-xref)*((x-xref)^2 + (zref-z_in)^2)^(-1/2)) + (xr(n)-x)*((xr(n)-x)^2 + z_in^2)^(-1/2);
+    x_out(n) = fzero(func, x(n)); %Position where outgoing wave transits into the other material 
+end
 
-dr = ((xt-x_in).^2+(z_in)^2)^(1/2) + ((x_in - x_ref)^2 + (z_in - z_ref)^2)^(1/2);
-dt = ((x_out-x_ref)^2 + (z_ref-z_in)^2)^(1/2) + ((xt-x_out).^2 + z_in^2)^(1/2);
+dt1 = ((xt-x_in).^2+(z_in)^2).^(1/2);
+dt2 = ((x_in - xref).^2 + (z_in - zref)^2).^(1/2);
+dr1 = ((xr-x_out).^2 + z_in^2).^(1/2);
+dr2 = ((x_out-xref).^2 + (zref-z_in)^2).^(1/2);
+d1 = dt1 + dr1; % Propagation distance
+d2 = dt2 + dr2;
 
-pt = sinc(pi*elementWidth*(abs(xt - xref)./dt)/lambda); % Transmit directivity function
-pr = sinc(pi*elementWidth*(abs(xr - xref)./dr)/lambda); % Receive directivity function
-A = A./sqrt(dr*dt); % Signal amplitude after propagation
+pt1 = sinc(pi*elementWidth*(abs(xt - x_in)./dt1)/lambda1); % Transmit directivity function
+pt2 = sinc(pi*elementWidth*(abs(x_in - xref)./dt2)/lambda2);
+pt = pt1 .* pt2;
+pr1 = sinc(pi*elementWidth*(abs(xr - x_out)./dr1)/lambda1);
+pr2 = sinc(pi*elementWidth*(abs(x_out - xref)./dr2)/lambda2); % Receive directivity function
+pr = pr1 .* pr2;
+A = A./sqrt((dr1+dr2)*(dt1+dt2)); % Signal amplitude after propagation
 
 % Complex spectrum for each transmitter-receiver pair
 G = zeros(numElements, numElements, N); % 3D matrix with zeros
 H = G;
 for w = 1:N
-    G(:,:,w) = F(w).*exp(-1i*(2*pi*freq(w))*d/c); 
+    G(:,:,w) = F(w).*exp(-1i*(2*pi*freq(w))*(d1/c_a + d2/c_b)); 
     H(:,:,w) = pr*pt.*A.*G(:,:,w);
 end
 S = H; % needed for input of PWI

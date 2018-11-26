@@ -1,11 +1,13 @@
 %% FMC multiple input (+ test wavefunctie)
 t = linspace(-1e-5, 1e-5, 1000); % niet aanpassen! tfm is hiervan afhankelijk
 plot(t,wave(2,5e6,t));
-c = [7e6 5e6 5e6 5e6];
-xref = -5;
-zref = 2;
-z_in = 1;
-numElements = 64;
+c_a = 7e6;
+c_b = 5e6;
+c = [c_a c_b c_b c_a];
+xref = 2;
+zref = 6;
+z_in = 5;
+numElements = 15;
 elementWidth = 0.53;
 pitch = 0.63;
 waveInfo = [1, 5e6,t];
@@ -22,9 +24,9 @@ aantalz= 20;
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
 zmin = 0.05;
-zmax = 5;
+zmax = 8;
 stepx = (numElements-1)*pitch/aantalx;
-stepz = (zmax-zmin)/aantalx;
+stepz = (zmax-zmin)/aantalz;
 for m = 1:aantalx+1
     for n = 1:aantalz+1
         x = xmin + (m-1)*stepx;
@@ -34,3 +36,5 @@ for m = 1:aantalx+1
 end
 imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)
 colorbar
+hold on 
+plot(

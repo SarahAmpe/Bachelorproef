@@ -1,4 +1,4 @@
-function [fmc,S] = FMC(waveInfo,materialInfo,elementInfo)
+function [H,S] = FMC(waveInfo,materialInfo,elementInfo)
 % FMC simulates the full matrix capture of a phased array for a material with a given scatterpoint.
 %
 % INPUT:
@@ -30,8 +30,8 @@ lambda = c/f;
 % Construction of the signal and its Fouriertransform (via FFT)
 signal = wave(A,f,t);
 N = length(t);
-F = fft(signal,2*N); 
-freq = (0:N-1)/N/(t(2)-t(1));
+F = permute(fft(signal,N),[1,3,2]); 
+freq = permute((0:N-1)/N/(t(2)-t(1)),[1,3,2]);
 
 
 % Calculating propagation distance, directivity functions and signal amplitude
@@ -46,24 +46,18 @@ pr = sinc(pi*elementWidth*(abs(xr - xref)./dr)/lambda); % Receive directivity fu
 A = A./sqrt(dr*dt); % Signal amplitude after propagation
 
 % Complex spectrum for each transmitter-receiver pair
-G = zeros(numElements, numElements, N); % 3D matrix with zeros
-H = G;
-for w = 1:N
-    G(:,:,w) = F(w).*exp(-1i*(2*pi*freq(w))*d/c); 
-    H(:,:,w) = pr*pt.*A.*G(:,:,w);
-end
+G= F.*exp(-1i*(2*pi*freq).*d/c); 
+H = pr*pt.*A.*G;
 S = H; % needed for input of PWI
 
 % Time-domain signal for each transmitter-receiver pair
-H = permute(H,[3,1,2]); % because the function hilbert works columnwise
+%H = permute(H,[3,1,2]); % because the function hilbert works columnwise
 % Hr = real(H); % because the function hilbert only works with real input
 % Hi = imag(H);
 % Hr = imag(hilbert(Hr));
 % Hi = imag(hilbert(Hi));
 % H = Hr + 1i* Hi;
 
-H = ifft(H);
-H = imag(hilbert(real(H)));
+H = real(ifft(H,[],3));
 %H = reshape(envelope(reshape(real(H),1000,numElements^2)),1000,numElements,numElements);
-fmc = abs(permute(H,[2,3,1]));
 

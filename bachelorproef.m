@@ -1,10 +1,13 @@
+clear;
+close all;
+
 %% FMC input (+ test wavefunctie)
-t = linspace(-1e-5, 1e-5, 1000); % niet aanpassen! tfm is hiervan afhankelijk
+t = linspace(-1e-5, 1e-5, 2048); % niet aanpassen! tfm is hiervan afhankelijk
 plot(t,wave(2,5e6,t));
 c = 7e6;
-xref = -5;
-zref = 2;
-numElements = 64;
+xref = 5;
+zref = 8;
+numElements = 128;
 elementWidth = 0.53;
 pitch = 0.63;
 waveInfo = [1, 5e6,t];
@@ -12,26 +15,30 @@ materialInfo = [c,xref,zref];
 elementInfo = [numElements,elementWidth,pitch];
 
 [fmc,S] = FMC(waveInfo,materialInfo,elementInfo);
+%[fmc2,S] = FMC(waveInfo,[c,-3,3],elementInfo);
+%fmc = fmc+fmc2;
 
 %% planeScan testing
-D = 5*pitch;
+D = 3*pitch;
 
-I = zeros(20);
 arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
-aantalx = 100;% nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 100;
+aantalx = 512;% nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 512;
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
 zmin = 0.01;
 zmax = 10;
 stepx = (numElements-1)*pitch/aantalx;
 stepz = (zmax-zmin)/aantalz;
-for m = 1:aantalx+1
-    for n = 1:aantalz+1
-        x = xmin + (m-1)*stepx;
-        z = zmin + (n-1)*stepz;
-        I(n,m) = planeScan(fmc, t, x, z, D, c, arraySetup);
-    end
+z = zmin:stepz:zmax;
+x = xmin:stepx:xmax;
+I = zeros(length(z),length(x));
+for m = 1:length(x)
+    tt = 2*z/c;
+    idx = abs(arraySetup-x(m))<=D/2;
+    signal = permute(fmc(idx,idx,:),[3,1,2]);
+    signal = sum(envelope(signal(:,:)),2);
+    I(:,m) = interp1(t,signal,tt);
 end
 imagesc(xmin:stepx:xmax, (zmin:stepz:zmax), I)
 colorbar

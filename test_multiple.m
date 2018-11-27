@@ -1,3 +1,9 @@
+clear;
+close all;
+% addpath('0. Hulpfuncties')
+% addpath('1. Originele FMC en PWI')
+% addpath('2. Project lijm')
+
 %% FMC multiple input (+ test wavefunctie)
 t = linspace(-1e-5, 1e-5, 1000); % niet aanpassen! tfm is hiervan afhankelijk
 plot(t,wave(2,5e6,t));

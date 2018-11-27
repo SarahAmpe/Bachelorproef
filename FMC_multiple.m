@@ -54,7 +54,7 @@ end
 x = xr;
 x_out = zeros(numElements,1);
 for n = 1:numElements
-    func = @(x) c_a/c_b*((x-xref)*((x-xref)^2 + (zref-z_in)^2)^(-1/2)) + (xr(n)-x)*((xr(n)-x)^2 + z_in^2)^(-1/2);
+    func = @(x) c_a/c_b*((x-xref)*((x-xref)^2 + (zref-z_in)^2)^(-1/2)) - (xr(n)-x)*((xr(n)-x)^2 + z_in^2)^(-1/2);
     x_out(n) = fzero(func, x(n)); %Position where outgoing wave transits into the other material 
 end
 

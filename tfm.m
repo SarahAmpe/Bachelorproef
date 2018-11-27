@@ -1,11 +1,14 @@
 function [intensity] = tfm(fullMat,t,x,z, c, arraySetup)
-% Calculates intensity of the Total Focusing Method at (x,z)
-% Input fullMat = full matrix of time domain signals
-%       t = time sequence of fullMat
-%       x = position of the point of interest along the array axis
-%       z = position of the point of interest normal to the array surface
-%       c = sound speed in the medium
-%       arraySetup = vector of x coordinates of the array elements
+% TFM Calculates intensity of the Total Focusing Method at (x,z)
+% INPUT:
+    % fullMat    = full matrix of time domain signals
+    % t          = time sequence of fullMat
+    % x          = position of the point of interest along the array axis
+    % z          = position of the point of interest normal to the array surface
+    % c          = sound speed in the medium
+    % arraySetup = vector of x coordinates of the array elements
+% OUTPUT:
+    % intensity = value of the intensity of the TFM image at (x,z)
 
 trans = length(arraySetup);
 intensity = 0;

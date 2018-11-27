@@ -15,10 +15,10 @@ for transmitter = 1:trans
         xr = arraySetup(receiver);
         
         func = @(x) c_b/c_a*((x-xt)*((x-xt)^2 + z_in^2)^(-1/2)) - (xref - x)*((xref -x)^2 + (zref-z_in)^2)^(-1/2);
-        x_in = fzero(func, xt); %Position where ingoing wave transits into the other material 
+        x_in = fzero(func, (xt + xref)/2); %Position where ingoing wave transits into the other material 
 
-        func = @(x) c_a/c_b*((x-xref)*((x-xref)^2 + (zref-z_in)^2)^(-1/2)) + (xr-x)*((xr-x)^2 + z_in^2)^(-1/2);
-        x_out = fzero(func, xr); %Position where outgoing wave transits into the other material 
+        func = @(x) c_a/c_b*((x-xref)*((x-xref)^2 + (zref-z_in)^2)^(-1/2)) - (xr-x)*((xr-x)^2 + z_in^2)^(-1/2);
+        x_out = fzero(func, (xr + xref)/2); %Position where outgoing wave transits into the other material 
         
         timeIn = sqrt((xt-x_in)^2 + z_in^2)/c_a + sqrt((xref - x_in)^2 + (z_in - zref)^2)/c_b;
         timeOut = sqrt((xr-x_out)^2 + z_in^2)/c_a + sqrt((xref - x_out)^2 + (z_in - zref)^2)/c_b;

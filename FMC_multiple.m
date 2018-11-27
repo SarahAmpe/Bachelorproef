@@ -44,14 +44,14 @@ freq = (0:N-1)/N/(t(2)-t(1));
 % Calculating propagation distance, directivity functions and signal amplitude
 xt = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);  % x=0 is the centre of the phased array
 xr = xt';
-x = xt;
+x = (xt + xref)./2;
 x_in = zeros(1,numElements);
 for n = 1:numElements
     func = @(x) c_b/c_a*((x-xt(n))*((x-xt(n))^2 + z_in^2)^(-1/2)) - (xref - x)*((xref -x)^2 + (zref-z_in)^2)^(-1/2);
     x_in(n) = fzero(func, x(n)); %Position where ingoing wave transits into the other material 
 end
 
-x = xr;
+x = (xref + xr)./2;
 x_out = zeros(numElements,1);
 for n = 1:numElements
     func = @(x) c_a/c_b*((x-xref)*((x-xref)^2 + (zref-z_in)^2)^(-1/2)) - (xr(n)-x)*((xr(n)-x)^2 + z_in^2)^(-1/2);

@@ -3,8 +3,8 @@ function [intensity] = tfm(fullMat,t,x,z, c, arraySetup)
 % INPUT:
     % fullMat    = full matrix of time domain signals
     % t          = time sequence of fullMat
-    % x          = position of the point of interest along the array axis
-    % z          = position of the point of interest normal to the array surface
+    % x          = positions of the point of interest along the array axis
+    % z          = positions of the point of interest normal to the array surface
     % c          = sound speed in the medium
     % arraySetup = vector of x coordinates of the array elements
 % OUTPUT:

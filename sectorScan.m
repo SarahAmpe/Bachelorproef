@@ -11,16 +11,21 @@ function [intensity] = sectorScan(fmc, t, x, z, c, arrSetup)
     % intensity = matrix with intensity for each (x,z) position
 
 arrCenter = median(arrSetup);
-signal = permute(fmc, [3 1 2]);
-signal = sum(envelope(signal(:,:)),2); % Take the Hilbert transform and sum it
+fmc = permute(fmc, [3 1 2]); % LET OP FMC IS PERMUTED
 intensity = zeros(length(z), length(x));
+r = sqrt( (x - arrCenter).^2 + z'.^2 ); % Matrix with propagation distances from array center
+th = atan(z'./(x - arrCenter)); % Matrix with beam steer angles (with respect to array normal)
 for m = 1:length(x)
     for n = 1:length(z)
-        r = sqrt( (x(m) - arrCenter)^2 + z(n)^2 ); % Propagation distances from array center
-        th = atan(z(n)/(x(m) - arrCenter)); % Required beam steer angles with respect to the array normal
-        time = 2*r + (arrSetup + arrSetup')*sin(th);
+        time = 2*r(m,n) + (arrSetup + arrSetup')*sin(th(m,n));
         time = time/c;
-        intensity(n,m) = sum(sum(interp1(t,signal,time)));
+        for transmit = 1:length(arrSetup)
+            for receive = 1:length(arrSetup)
+                signal = envelope(fmc(:,transmit,receive)); % Let op, fmc is permuted
+                signal = interp1(t,signal,time(transmit,receive));
+                intensity(n,m) = intensity(n,m) + signal;
+            end
+        end
     end
 end
 

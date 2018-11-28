@@ -53,23 +53,15 @@ colorbar
 
 %% sectorScan testing
 I = sectorScan(fmc,t,x,z,c,arraySetup);
-imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)
+imagesc(x,z,I)
 colorbar
 
 %% focusedScan testing
 I = focusedScan(fmc,t,x,z,D,c,arraySetup);
-imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)
+imagesc(x,z,I)
 colorbar
 
 %% TFM testing
-I = zeros(20);
-for m = 1:aantalx+1
-    for n = 1:aantalz+1
-        x = xmin + (m-1)*stepx;
-        z = zmin + (n-1)*stepz;
-        I(n,m) = tfm(fmc,t, x, z, c, arraySetup);
-    end
-end
-imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)
+I = tfm(fmc,t,x,z, c, arraySetup);
+imagesc(x,z,I)
 colorbar
-

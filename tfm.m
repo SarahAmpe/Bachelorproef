@@ -46,3 +46,17 @@ for m = 1:length(x)
         end
     end
 end
+
+% intensity = zeros(length(z), length(x));
+% z = z';
+% for transmit = 1:size(fullMat, 1)
+%     for receive = 1:size(fullMat, 2)
+%         xtx = arraySetup(transmit); % Transmitter position
+%         xrx = arraySetup(receive); % Receiver position
+%         time = ( sqrt((xtx-x).^2 + z.^2) + sqrt((xrx-x).^2 + z.^2) )/c;
+%         signal = permute(fullMat(transmit, receive, :), [3 1 2]);
+%         signal = envelope(signal);
+%         I = interp1(t,signal,time);
+%         intensity = intensity + I;
+%     end
+% end

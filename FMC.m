@@ -1,16 +1,14 @@
 function [H,S] = FMC(waveInfo,materialInfo,elementInfo)
-% FMC simulates the full matrix capture of a phased array for a material with a given scatterpoint.
-%
+% FMC Simulates the full matrix capture of a phased array for a material with a given scatterpoint.
 % INPUT:
-% waveInfo     = Amplitude, frequency and timesequence for the simulated signal (cosine wave)
-% materialInfo = Velocity of the wave in the material and x,y-coordinates ([xref,yref]) of the defect (pointscatterer)
-% elementInfo  = Number of elements, the width and the pitch of the elements in the array setup
-%
+    % waveInfo     = Amplitude, frequency and timesequence for the simulated signal (cosine wave)
+    % materialInfo = Velocity of the wave in the material and x,y-coordinates ([xref,yref]) of the defect (pointscatterer)
+    % elementInfo  = Number of elements, the width and the pitch of the elements in the array setup
 % OUTPUT:
-% S   = 3D-matrix with the resulting spectrum for each transmitter-receiver pair.
-%       (dimensions: transmitter, receiver, frequency)
-% fmc = 3D-matrix with the resulting time-domain signal for each transmitter-receiver pair obtained with the complex Hilbert transform.
-%       (dimensions: transmitter, receiver, time)
+    % S   = 3D-matrix with the resulting spectrum for each transmitter-receiver pair.
+    %       (dimensions: transmitter, receiver, frequency)
+    % fmc = 3D-matrix with the resulting time-domain signal for each transmitter-receiver pair obtained with the complex Hilbert transform.
+    %       (dimensions: transmitter, receiver, time)
 
 % Parameters
 A = waveInfo(1);

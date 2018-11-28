@@ -1,27 +1,27 @@
-function [intensity] = sectorScan(fullMat,t, x, z, c, arrSetup)
-% Calculates intensity of the plane B-scan image at (x,z)
-% Input fullMat = full matrix of time domain signals
-%       t = time sequence of fullMat
-%       x = position of the point of interest along the array axis
-%       z = position of the point of interest normal to the array surface
-%       c = sound speed in the medium
-%       arrSetup = vector of x coordinates of the array elements
+function [intensity] = sectorScan(fmc, t, x, z, c, arrSetup)
+% SECTORSCAN Calculates intensity of the plane B-scan image for each point in a grid
+% INPUT: 
+    % fmc      = full matrix of time domain signals
+    % t        = time sequence of fullMat
+    % x        = array with positions of the points of interest along the array axis
+    % z        = array with positions of the points of interest normal to the array surface
+    % c        = sound speed in the medium
+    % arrSetup = vector of x coordinates of the array elements
+% OUTPUT:
+    % intensity = matrix with intensity for each (x,z) position
 
 arrCenter = median(arrSetup);
-r = sqrt( (x - arrCenter)^2 + z^2 ); % Propagation distance from array center
-intensity = 0;
-for transmit = 1:size(fullMat, 1)
-    for receive = 1:size(fullMat, 2)
-        th = atan(z/x); % Required beam steer angle with respect to the array normal
-        xtx = arrSetup(transmit); % Transmitter position
-        xrx = arrSetup(receive); % Receiver position
-        time = 2*r + (xtx + xrx)*sin(th); 
+signal = permute(fmc, [3 1 2]);
+signal = sum(envelope(signal(:,:)),2); % Take the Hilbert transform and sum it
+intensity = zeros(length(z), length(x));
+for m = 1:length(x)
+    for n = 1:length(z)
+        r = sqrt( (x(m) - arrCenter)^2 + z(n)^2 ); % Propagation distances from array center
+        th = atan(z(n)/(x(m) - arrCenter)); % Required beam steer angles with respect to the array normal
+        time = 2*r + (arrSetup + arrSetup')*sin(th);
         time = time/c;
-        [lowerTime,upperTime] = time2(t,time);
-        lowerSignal = fullMat(transmit, receive, lowerTime);
-        upperSignal = fullMat(transmit, receive, upperTime);
-        signals = (lowerSignal + upperSignal)/2; 
-        intensity = intensity + signals;
+        intensity(n,m) = sum(sum(interp1(t,signal,time)));
     end
 end
 
+end

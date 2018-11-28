@@ -15,18 +15,21 @@ intensity = zeros(length(z), length(x));
 for m = 1:length(x)
     arrElems = abs(arrSetup - x(m)) <= D/2; % Array elements that matter
     subMat = fmc(arrElems, arrElems, :); % Select the relevant submatrix
-    arrSetup = arrSetup(arrElems); % Overwrite arrSetup with relevant transducers
+    subSetup = arrSetup(arrElems); % Overwrite arrSetup with relevant transducers
     for n = 1:length(z)
         for transmit = 1:size(subMat, 1)
             for receive = 1:size(subMat, 2)
-                xtx = arrSetup(transmit); % Transmitter position
-                xrx = arrSetup(receive); % Receiver position
-                time = ( sqrt((xtx-x(m))^2 + z(n)^2) + sqrt((xrx-x(m))^2 + z(n)^2) )/c;
+                xtx = subSetup(transmit); % Transmitter position
+                xrx = subSetup(receive); % Receiver position
+                time = sqrt((xtx-x(m))^2 + z(n)^2) + sqrt((xrx-x(m))^2 + z(n)^2);
+                time = time/c;
                 [lowerTime,upperTime] = time2(t,time);
-                lowerSignal = envelope(subMat(transmit, receive, lowerTime));
-                upperSignal = envelope(subMat(transmit, receive, upperTime));
-                signals = (lowerSignal + upperSignal)/2; 
-                intensity(n,m) = intensity(n,m) + signals;
+                signal = permute(subMat(transmit, receive, :), [3 1 2]);
+                signal = envelope(signal); % Hilbert transform van huidige signaal
+                lowerSignal = signal(lowerTime);
+                upperSignal = signal(upperTime);
+                signal = (lowerSignal + upperSignal)/2;
+                intensity(n,m) = intensity(n,m) + signal;
             end
         end
     end

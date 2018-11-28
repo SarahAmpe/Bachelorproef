@@ -15,7 +15,7 @@ elementWidth = 0.53;
 pitch = 0.63;
 
 % Waveplot en full matrix berekenen
-plot(t,wave(2,5e6,t));
+plot(t,wave(1,5e6,t));
 waveInfo = [1, 5e6,t];
 materialInfo = [c,xref,zref];
 elementInfo = [numElements,elementWidth,pitch];
@@ -50,18 +50,19 @@ x = xmin:stepx:xmax;
 I = planeScan(fmc,t,x,z,D,c,arraySetup);
 imagesc(xmin:stepx:xmax, (zmin:stepz:zmax), I)
 colorbar
-
+title('Plane B-scan')
 %% sectorScan testing
 I = sectorScan(fmc,t,x,z,c,arraySetup);
 imagesc(x,z,I)
 colorbar
-
+title('Sector B-scan')
 %% focusedScan testing
 I = focusedScan(fmc,t,x,z,D,c,arraySetup);
 imagesc(x,z,I)
 colorbar
-
+title('Focused B-scan')
 %% TFM testing
 I = tfm(fmc,t,x,z, c, arraySetup);
 imagesc(x,z,I)
 colorbar
+title('Total Focusing Method')

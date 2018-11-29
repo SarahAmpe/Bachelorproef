@@ -37,7 +37,7 @@ lambda2 = c_b/f;
 % Construction of the signal and its Fouriertransform (via FFT)
 signal = wave(A,f,t);
 N = length(t);
-F = fft(signal,2*N); 
+F = fft(signal); 
 freq = (0:N-1)/N/(t(2)-t(1));
 
 

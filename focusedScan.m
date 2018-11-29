@@ -12,25 +12,20 @@ function [intensity] = focusedScan(fmc, t, x, z, D, c, arrSetup)
     % intensity = matrix with intensity for each (x,z) position
 
 intensity = zeros(length(z), length(x));
+z = z';
 for m = 1:length(x)
     arrElems = abs(arrSetup - x(m)) <= D/2; % Array elements that matter
     subMat = fmc(arrElems, arrElems, :); % Select the relevant submatrix
     subSetup = arrSetup(arrElems); % Overwrite arrSetup with relevant transducers
-    for n = 1:length(z)
-        for transmit = 1:size(subMat, 1)
-            for receive = 1:size(subMat, 2)
-                xtx = subSetup(transmit); % Transmitter position
-                xrx = subSetup(receive); % Receiver position
-                time = sqrt((xtx-x(m))^2 + z(n)^2) + sqrt((xrx-x(m))^2 + z(n)^2);
-                time = time/c;
-                [lowerTime,upperTime] = time2(t,time);
-                signal = permute(subMat(transmit, receive, :), [3 1 2]);
-                signal = envelope(signal); % Hilbert transform van huidige signaal
-                lowerSignal = signal(lowerTime);
-                upperSignal = signal(upperTime);
-                signal = (lowerSignal + upperSignal)/2;
-                intensity(n,m) = intensity(n,m) + signal;
-            end
+    for transmit = 1:size(subMat, 1)
+        for receive = 1:size(subMat, 2)
+            xtx = subSetup(transmit); % Transmitter position
+            xrx = subSetup(receive); % Receiver position
+            time = (sqrt((xtx-x(m))^2 + z.^2) + sqrt((xrx-x(m))^2 + z.^2))./c;
+            signal = permute(subMat(transmit, receive, :), [3 1 2]);
+            signal = envelope(signal); % Hilbert transform van huidige signaal
+            I = interp1(t,signal,time);
+            intensity(:,m) = intensity(:,m) + I;
         end
     end
 end

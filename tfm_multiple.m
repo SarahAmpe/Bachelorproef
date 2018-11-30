@@ -27,10 +27,9 @@ for transmitter = 1:trans
         timeOut = sqrt((xr-x_out)^2 + z_in^2)/c_a + sqrt((xref - x_out)^2 + (z_in - zref)^2)/c_b;
         time = timeIn + timeOut;
         
-        [lowerTime,upperTime] = time2(t,time);
-        lowerSignal = fullMat(transmitter, receiver, lowerTime);
-        upperSignal = fullMat(transmitter, receiver, upperTime);
-        signals = (lowerSignal + upperSignal)/2; % Linearly interpolating time
-        intensity = intensity + signals;
+        signal = permute(fullMat(transmitter, receiver, :), [3 1 2]);
+        signal = envelope(signal(:,:));
+        I = interp1(t,signal,time); % Linearly interpolating time
+        intensity = intensity + I;
     end
 end

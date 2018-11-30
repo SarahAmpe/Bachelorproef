@@ -8,7 +8,6 @@ x_in = z_in * tan(alphas);
 
 N = size(pwi,2);
 x_out = zeros(length(zref),length(xref));
-t_out = zeros(length(zref),length(xref));
 for n = 1:length(angles)
     t_in(:,:) = (x_in(n)*sin(alphas(n)) + z_in*cos(alphas(n)))/c_a + ((xref - x_in(n))*sin(angles(n)) + (zref - z_in)*cos(angles(n)))/c_b;
     for m = 1:N

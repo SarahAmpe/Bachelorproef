@@ -22,22 +22,6 @@ elementInfo = [numElements,elementWidth,pitch];
 
 [fmc,S] = FMC_multiple(waveInfo,materialInfo,elementInfo);
 
-%% Algemene testparameters
-% Invoerwaarden
-aantalx = 50; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 50;
-zmin = 0; % Testgrenzen voor z
-zmax = 10;
-
-% Andere nodige waarden
-xmin = -(numElements-1)*pitch/2;
-xmax = (numElements-1)*pitch/2;
-arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
-stepx = (numElements-1)*pitch/aantalx;
-stepz = (zmax-zmin)/aantalz;
-z = zmin:stepz:zmax;
-x = xmin:stepx:xmax;
-
 %% TFM multiple testing
 I = zeros(20);
 arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
@@ -62,23 +46,39 @@ hold on
 plot([xmin,xmax],[z_in,z_in],'r','LineWidth',2)
 hold off
 
-%% PWI simulation en testing
+%%  FMC for PWI simulation en testing
 
 angles = linspace(-60,60,120);
 t = linspace(-1e-5, 1e-5, 2048); 
 c_a = 1500000; % velocity in water
 c_b = 5000000;
 c = [c_a c_b c_b c_a];
-xref = -3;
-zref = 5.5;
+xref = 2;
+zref = 6;
 z_in = 5;
-numElements = 64;
+numElements = 32;
 elementWidth = 0.53;
 pitch = 0.63;
 waveInfo = [1, 5e6,t];
 materialInfo = [xref,zref, z_in,c];
 elementInfo = [numElements,elementWidth,pitch];
 [fmc,S] = FMC_multiple(waveInfo,materialInfo,elementInfo);
+
+%% PWI_imaging testing
+% Invoerwaarden
+aantalx = 32; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 32;
+zmin = 0; % Testgrenzen voor z
+zmax = 10;
+
+% Andere nodige waarden
+xmin = -(numElements-1)*pitch/2;
+xmax = (numElements-1)*pitch/2;
+arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
+stepx = (numElements-1)*pitch/aantalx;
+stepz = (zmax-zmin)/aantalz;
+z = zmin:stepz:zmax;
+x = xmin:stepx:xmax;
 
 pwi = PWI(t,S,angles,pitch,c);
 

@@ -5,7 +5,7 @@ close all;
 % addpath('2. Project lijm')
 
 %% FMC multiple input (+ test wavefunctie)
-t = linspace(-1e-5, 1e-5, 2048); % niet aanpassen! tfm is hiervan afhankelijk
+t = linspace(-1e-5, 1e-5, 2048); 
 plot(t,wave(1,5e6,t));
 c_a = 7e6;
 c_b = 5e6;
@@ -24,8 +24,8 @@ elementInfo = [numElements,elementWidth,pitch];
 
 %% Algemene testparameters
 % Invoerwaarden
-aantalx = 64; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 64;
+aantalx = 50; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 50;
 zmin = 0; % Testgrenzen voor z
 zmax = 10;
 
@@ -63,10 +63,27 @@ plot([xmin,xmax],[z_in,z_in],'r','LineWidth',2)
 hold off
 
 %% PWI simulation en testing
+
 angles = linspace(-60,60,120);
+t = linspace(-1e-5, 1e-5, 2048); 
+c_a = 1500000; % velocity in water
+c_b = 5000000;
+c = [c_a c_b c_b c_a];
+xref = -3;
+zref = 5.5;
+z_in = 5;
+numElements = 64;
+elementWidth = 0.53;
+pitch = 0.63;
+waveInfo = [1, 5e6,t];
+materialInfo = [xref,zref, z_in,c];
+elementInfo = [numElements,elementWidth,pitch];
+[fmc,S] = FMC_multiple(waveInfo,materialInfo,elementInfo);
+
 pwi = PWI(t,S,angles,pitch,c);
+
 I = PWI_image(pwi,t, x, z, z_in, c_a, c_b, arraySetup,angles);
-imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)
+imagesc(x,z,I)
 colorbar
 hold on
 plot([xmin,xmax],[z_in,z_in],'r','LineWidth',2)

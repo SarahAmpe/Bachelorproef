@@ -18,7 +18,7 @@ T = size(H,3);
 freq = permute((0:T-1)/T/(t(2)-t(1)),[1,3,2]);
 tau = (1:N)'*d*sin(angles)/c_a - min((1:N)'*d*sin(angles)/c_a); %c_a of c_b?
 M = repmat(zeros,length(angles),N);
-for w = 1:N
+for w = 1:T
     M(:,:,w) = (H(:,:,w)*exp(-1j*freq(w)*tau))';
 end
 M = real(ifft(M,[],3));

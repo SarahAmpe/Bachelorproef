@@ -22,10 +22,10 @@ elementInfo = [numElements,elementWidth,pitch];
 [fmc,S] = FMC(waveInfo,materialInfo,elementInfo);
 
 % Extra defecten toevoegen
-% fmc = fmc + FMC(waveInfo,[c,-15,2],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,-10,5],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,0,3],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,15,7],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,-15,2],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,-10,5],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,0,3],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,15,7],elementInfo);
 
 
 %% Algemene testparameters

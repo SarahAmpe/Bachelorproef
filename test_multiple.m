@@ -9,7 +9,7 @@ t = linspace(-1e-5, 1e-5, 2048);
 plot(t,wave(1,5e6,t));
 c_a = 6.3e6; % Longitudinaal in aluminium
 c_b = 1.5e6; % Sound velocity in water
-c_c = 3.1e6 % Transversaal in aluminium
+c_c = 3.1e6; % Transversaal in aluminium
 c = [c_a c_b c_b c_c];
 xref = -3;
 zref = 5.5;
@@ -37,13 +37,14 @@ stepx = (numElements-1)*pitch/aantalx;
 stepz = (zmax-zmin)/aantalz;
 z = zmin:stepz:zmax;
 x = xmin:stepx:xmax;
+arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
 
 
 %% TFM testing (multiple layers)
-I = zeros(20);
-for m = x
-    for n = z
-        I(n,m) = tfm_multiple(fmc,t, x, z, z_in, c_a, c_b, arraySetup);
+I = zeros(aantalz, aantalx);
+for m = 1:aantalx
+    for n = 1:aantalz
+        I(n,m) = tfm_multiple(fmc,t, x(m), z(n), z_in, c_a, c_b, arraySetup);
     end
 end
 imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)

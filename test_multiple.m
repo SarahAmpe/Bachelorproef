@@ -7,9 +7,10 @@ close all;
 %% FMC multiple input (+ test wavefunctie)
 t = linspace(-1e-5, 1e-5, 2048); 
 plot(t,wave(1,5e6,t));
-c_a = 7e6;
-c_b = 5e6;
-c = [c_a c_b c_b c_a];
+c_a = 6.3e6; % Longitudinaal in aluminium
+c_b = 1.5e6; % Sound velocity in water
+c_c = 3.1e6 % Transversaal in aluminium
+c = [c_a c_b c_b c_c];
 xref = -3;
 zref = 5.5;
 z_in = 5;
@@ -20,23 +21,28 @@ waveInfo = [1, 5e6,t];
 materialInfo = [xref,zref, z_in,c];
 elementInfo = [numElements,elementWidth,pitch];
 
-[fmc,S] = FMC_multiple(waveInfo,materialInfo,elementInfo);
+[fmc,~] = FMC_multiple(waveInfo,materialInfo,elementInfo);
 
-%% TFM multiple testing
-I = zeros(20);
-arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
-aantalx= 20;% nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz= 20;
-xmin = -(numElements-1)*pitch/2;
-xmax = (numElements-1)*pitch/2;
+%% Algemene testparameters
+% Invoerwaarden
+aantalx = 20; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 20;
 zmin = 0.05;
 zmax = 8;
+
+% Andere nodige waarden
+xmin = -(numElements-1)*pitch/2;
+xmax = (numElements-1)*pitch/2;
 stepx = (numElements-1)*pitch/aantalx;
 stepz = (zmax-zmin)/aantalz;
-for m = 1:aantalx+1
-    for n = 1:aantalz+1
-        x = xmin + (m-1)*stepx;
-        z = zmin + (n-1)*stepz;
+z = zmin:stepz:zmax;
+x = xmin:stepx:xmax;
+
+
+%% TFM testing (multiple layers)
+I = zeros(20);
+for m = x
+    for n = z
         I(n,m) = tfm_multiple(fmc,t, x, z, z_in, c_a, c_b, arraySetup);
     end
 end
@@ -46,40 +52,8 @@ hold on
 plot([xmin,xmax],[z_in,z_in],'r','LineWidth',2)
 hold off
 
-%%  FMC for PWI simulation en testing
-
+%% PWI testing (multiple layers)
 angles = linspace(-60,60,120);
-t = linspace(-1e-5, 1e-5, 2048); 
-c_a = 1500000; % velocity in water
-c_b = 5000000;
-c = [c_a c_b c_b c_a];
-xref = 2;
-zref = 6;
-z_in = 5;
-numElements = 32;
-elementWidth = 0.53;
-pitch = 0.63;
-waveInfo = [1, 5e6,t];
-materialInfo = [xref,zref, z_in,c];
-elementInfo = [numElements,elementWidth,pitch];
-[fmc,S] = FMC_multiple(waveInfo,materialInfo,elementInfo);
-
-%% PWI_imaging testing
-% Invoerwaarden
-aantalx = 32; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 32;
-zmin = 0; % Testgrenzen voor z
-zmax = 10;
-
-% Andere nodige waarden
-xmin = -(numElements-1)*pitch/2;
-xmax = (numElements-1)*pitch/2;
-arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
-stepx = (numElements-1)*pitch/aantalx;
-stepz = (zmax-zmin)/aantalz;
-z = zmin:stepz:zmax;
-x = xmin:stepx:xmax;
-
 pwi = PWI(t,S,angles,pitch,c);
 
 I = PWI_image(pwi,t, x, z, z_in, c_a, c_b, arraySetup,angles);

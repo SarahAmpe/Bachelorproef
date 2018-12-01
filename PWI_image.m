@@ -15,7 +15,9 @@ for n = 1:length(angles)
         xr = arraySetup(m);
         func = @(x,x_p,z_p) c_a/c_b*((x-x_p)./sqrt((x-x_p)^2 + (z_p-z_in).^2)) - (xr-x)./sqrt((xr-x)^2 + z_in^2);
         for l = 1:length(xref)
-            x_out(:,l) = repmat(fzero(@(x) func(x,xref(l),zref(1)), (xref(l) + xr)/2),length(zref),1);
+            for k = 1:length(zref)
+                x_out(k,l) = fzero(@(x) func(x,xref(l),zref(k)), (xref(l) + xr)/2);
+            end
         end
         t_out = sqrt((xr-x_out).^2 + z_in^2)./c_a + sqrt((xref - x_out).^2 + (z_in - zref).^2)./c_b;
         time = t_in + t_out;

@@ -27,16 +27,14 @@ elementInfo = [numElements,elementWidth,pitch];
 % Invoerwaarden
 aantalx = 20; % Nauwkeurigheid (aantal punten dat je wilt plotten)
 aantalz = 20;
-zmin = 0.05;
+zmin = 0.5;
 zmax = 8;
 
 % Andere nodige waarden
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
-stepx = (numElements-1)*pitch/aantalx;
-stepz = (zmax-zmin)/aantalz;
-z = zmin:stepz:zmax;
-x = xmin:stepx:xmax;
+z = linspace(zmin, zmax, aantalz);
+x = linspace(xmin, xmax, aantalx);
 arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
 
 
@@ -47,7 +45,7 @@ for m = 1:aantalx
         I(n,m) = tfm_multiple(fmc,t, x(m), z(n), z_in, c_a, c_b, arraySetup);
     end
 end
-imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)
+imagesc(x,z,I)
 colorbar
 hold on
 plot([xmin,xmax],[z_in,z_in],'r','LineWidth',2)

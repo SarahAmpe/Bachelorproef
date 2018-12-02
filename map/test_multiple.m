@@ -1,40 +1,62 @@
+clear;
+close all;
+% addpath('0. Hulpfuncties')
+% addpath('1. Originele FMC en PWI')
+% addpath('2. Project lijm')
+
 %% FMC multiple input (+ test wavefunctie)
-t = linspace(-1e-5, 1e-5, 1000); % niet aanpassen! tfm is hiervan afhankelijk
-plot(t,wave(2,5e6,t));
-c_a = 7e6;
-c_b = 5e6;
-c = [c_a c_b c_b c_a];
+t = linspace(-1e-5, 1e-5, 2048); 
+plot(t,wave(1,5e6,t));
+c_a = 6.3e6; % Longitudinaal in aluminium
+c_b = 1.5e6; % Sound velocity in water
+c_c = 3.1e6; % Transversaal in aluminium
+c = [c_a c_b c_b c_c];
 xref = -3;
 zref = 5.5;
 z_in = 5;
-numElements = 15;
+numElements = 64;
 elementWidth = 0.53;
 pitch = 0.63;
 waveInfo = [1, 5e6,t];
 materialInfo = [xref,zref, z_in,c];
 elementInfo = [numElements,elementWidth,pitch];
 
-[fmc,S] = FMC_multiple(waveInfo,materialInfo,elementInfo);
+[fmc,~] = FMC_multiple(waveInfo,materialInfo,elementInfo);
 
-%% TFM multiple testing
-I = zeros(20);
-arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
-aantalx= 20;% nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz= 20;
+%% Algemene testparameters
+% Invoerwaarden
+aantalx = 20; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 20;
+zmin = 0.5;
+zmax = 8;
+
+% Andere nodige waarden
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
-zmin = 0.05;
-zmax = 8;
-stepx = (numElements-1)*pitch/aantalx;
-stepz = (zmax-zmin)/aantalz;
-for m = 1:aantalx+1
-    for n = 1:aantalz+1
-        x = xmin + (m-1)*stepx;
-        z = zmin + (n-1)*stepz;
-        I(n,m) = tfm_multiple(fmc,t, x, z, z_in, c_a, c_b, arraySetup);
+z = linspace(zmin, zmax, aantalz);
+x = linspace(xmin, xmax, aantalx);
+arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
+
+
+%% TFM testing (multiple layers)
+I = zeros(aantalz, aantalx);
+for m = 1:aantalx
+    for n = 1:aantalz
+        I(n,m) = tfm_multiple(fmc,t, x(m), z(n), z_in, c_a, c_b, arraySetup);
     end
 end
-imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)
+imagesc(x,z,I)
+colorbar
+hold on
+plot([xmin,xmax],[z_in,z_in],'r','LineWidth',2)
+hold off
+
+%% PWI testing (multiple layers)
+angles = linspace(-60,60,120);
+pwi = PWI(t,S,angles,pitch,c);
+
+I = PWI_image(pwi,t, x, z, z_in, c_a, c_b, arraySetup,angles);
+imagesc(x,z,I)
 colorbar
 hold on
 plot([xmin,xmax],[z_in,z_in],'r','LineWidth',2)

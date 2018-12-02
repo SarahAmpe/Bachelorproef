@@ -1,23 +1,24 @@
-function [intensity] = planeScan(fullMat,t, x, z, D, c, arrSetup)
-% PLANESCAN Calculates intensity of the plane B-scan image at (x,z)
-%
+function [intensity] = planeScan(fmc, t, x, z, D, c, arrSetup)
+% PLANESCAN Calculates intensity of the plane B-scan image for each point in a grid
 % INPUT: 
-% fullMat     = full matrix of time domain signals
-% sampleTimes = time sequence of fullMat
-% x           = position of the point of interest along the array axis
-% z           = position of the point of interest normal to the array surface
-% D           = aperture width
-% c           = sound speed in the medium
-% arrSetup    = vector of x coordinates of the array elements
+    % fmc      = full matrix of time domain signals
+    % t        = time sequence of fullMat
+    % x        = array with positions of the points of interest along the array axis
+    % z        = array with positions of the points of interest normal to the array surface
+    % D        = aperture width
+    % c        = sound speed in the medium
+    % arrSetup = vector of x coordinates of the array elements
+% OUTPUT:
+    % intensity = matrix with intensity for each (x,z) position
 
-arrElems = abs(arrSetup - x) <= D/2; % Array elements that matter
-time = 2*z/c; % Appropriate time
-[lowerTime,upperTime] = time2(t,time);
-[~,lowerTime] = min(abs(t-time));
-lowerSignal = fullMat(arrElems, arrElems, lowerTime);
-upperSignal = fullMat(arrElems, arrElems, upperTime);
-upperSignal = lowerSignal;
-signals = (lowerSignal + upperSignal)/2; % Linearly interpolating time
+% Building the intensity matrix columnwise
+time = 2*z/c; % Appropriate times
+intensity = zeros(length(z), length(x));
+for m = 1:length(x)
+    arrElems = abs(arrSetup - x(m)) <= D/2; % Array elements that matter
+    signal = permute(fmc(arrElems,arrElems,:),[3,1,2]);
+    signal = sum(envelope(signal(:,:)),2); % Take the Hilbert transform and sum for each transmitter (?)
+    intensity(:,m) = interp1(t,signal,time);
+end
 
-intensity = abs(sum(sum(signals)));
 end

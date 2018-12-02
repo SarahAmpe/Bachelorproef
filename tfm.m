@@ -1,24 +1,45 @@
 function [intensity] = tfm(fullMat,t,x,z, c, arraySetup)
-% Calculates intensity of the Total Focusing Method at (x,z)
-% Input fullMat = full matrix of time domain signals
-%       t = time sequence of fullMat
-%       x = position of the point of interest along the array axis
-%       z = position of the point of interest normal to the array surface
-%       c = sound speed in the medium
-%       arraySetup = vector of x coordinates of the array elements
+% TFM Calculates intensity of the Total Focusing Method at (x,z)
+% INPUT:
+    % fullMat    = full matrix of time domain signals
+    % t          = time sequence of fullMat
+    % x          = positions of the point of interest along the array axis
+    % z          = positions of the point of interest normal to the array surface
+    % c          = sound speed in the medium
+    % arraySetup = vector of x coordinates of the array elements
+% OUTPUT:
+    % intensity = value of the intensity of the TFM image at (x,z)
 
-trans = length(arraySetup);
-intensity = 0;
-for transmitter = 1:trans
-    for receiver = 1:trans
-        xtx = arraySetup(transmitter);
-        xrx = arraySetup(receiver);
-        time = sqrt((xtx-x)^2+z^2) + sqrt((xrx-x)^2+z^2);
-        time = time/c;
-        [lowerTime,upperTime] = time2(t,time);
-        lowerSignal = fullMat(transmitter, receiver, lowerTime);
-        upperSignal = fullMat(transmitter, receiver, upperTime);
-        signals = (lowerSignal + upperSignal)/2; % Linearly interpolating time
-        intensity = intensity + signals;
+% intensity = zeros(length(z), length(x));
+% for m = 1:length(x)
+%     for n = 1:length(z)
+%         for transmit = 1:size(fullMat, 1)
+%             for receive = 1:size(fullMat, 2)
+%                 xtx = arraySetup(transmit); % Transmitter position
+%                 xrx = arraySetup(receive); % Receiver position
+%                 time = ( sqrt((xtx-x(m))^2 + z(n)^2) + sqrt((xrx-x(m))^2 + z(n)^2) )/c;
+%                 [lowerTime,upperTime] = time2(t,time);
+%                 signal = permute(fullMat(transmit, receive, :), [3 1 2]);
+%                 signal = envelope(signal);
+%                 lowerSignal = signal(lowerTime);
+%                 upperSignal = signal(upperTime);
+%                 signal = (lowerSignal + upperSignal)/2;
+%                 intensity(n,m) = intensity(n,m) + signal;
+%             end
+%         end
+%     end
+% end
+
+intensity = zeros(length(z), length(x));
+z = z';
+for transmit = 1:size(fullMat, 1)
+    for receive = 1:size(fullMat, 2)
+        xtx = arraySetup(transmit); % Transmitter position
+        xrx = arraySetup(receive); % Receiver position
+        time = ( sqrt((xtx-x).^2 + z.^2) + sqrt((xrx-x).^2 + z.^2) )/c;
+        signal = permute(fullMat(transmit, receive, :), [3 1 2]);
+        signal = envelope(signal);
+        I = interp1(t,signal,time);
+        intensity = intensity + I;
     end
 end

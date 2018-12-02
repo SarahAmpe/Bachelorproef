@@ -1,37 +1,50 @@
 clear;
 close all;
+% addpath('0. Hulpfuncties')
+% addpath('1. Originele FMC en PWI')
+% addpath('2. Project lijm')
 
 %% FMC input (+ test wavefunctie)
-t = linspace(-1e-5, 1e-5, 2048); % niet aanpassen! tfm is hiervan afhankelijk
-plot(t,wave(2,5e6,t));
+% Parameters
+t = linspace(-1e-5, 1e-5, 2048);
 c = 7e6;
-xref = 5;
-zref = 8;
-numElements = 128;
+xref = 4;
+zref = 4;
+numElements = 64;
 elementWidth = 0.53;
 pitch = 0.63;
+
+% Waveplot en full matrix berekenen
+plot(t,wave(1,5e6,t));
 waveInfo = [1, 5e6,t];
 materialInfo = [c,xref,zref];
 elementInfo = [numElements,elementWidth,pitch];
-
 [fmc,S] = FMC(waveInfo,materialInfo,elementInfo);
-%[fmc2,S] = FMC(waveInfo,[c,-3,3],elementInfo);
-%fmc = fmc+fmc2;
 
-%% planeScan testing
-D = 3*pitch;
+% Extra defecten toevoegen
+fmc = fmc + FMC(waveInfo,[c,-15,2],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,-10,5],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,0,3],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,15,7],elementInfo);
 
-arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
-aantalx = 512;% nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 512;
+
+%% Algemene testparameters
+% Invoerwaarden
+D = 5*pitch; % Aperture width
+aantalx = 64; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 64;
+zmin = 0.01; % Testgrenzen voor z
+zmax = 10;
+
+% Andere nodige waarden
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
-zmin = 0.01;
-zmax = 10;
+arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
 stepx = (numElements-1)*pitch/aantalx;
 stepz = (zmax-zmin)/aantalz;
 z = zmin:stepz:zmax;
 x = xmin:stepx:xmax;
+<<<<<<< HEAD
 I = zeros(length(z),length(x));
 for m = 1:length(x)
     tt = 2*z/c;
@@ -80,8 +93,34 @@ cb = colorbar;
 cb.Label.String = 'Intensity of the wave in the receiving transducers';
 file = string(['SectorScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)
+=======
 
+>>>>>>> master
+
+%% planeScan testing
+I = planeScan(fmc,t,x,z,D,c,arraySetup);
+imagesc(xmin:stepx:xmax, (zmin:stepz:zmax), I)
+plotTitle = ['PlaneBScan at position (', num2str(xref), ',' , num2str(zref), ')' ];
+title(plotTitle)
+xlabel('x-coordinate in mm')
+ylabel('z-coordinate in mm')
+cb = colorbar;
+cb.Label.String = 'Intensity of the wave in the receiving transducers';
+file = string(['PlaneBScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
+saveas(gcf, file)
+%% sectorScan testing
+I = sectorScan(fmc,t,x,z,c,arraySetup);
+imagesc(x,z,I)
+plotTitle = ['SectorScan at position (', num2str(xref), ',' , num2str(zref), ')' ];
+title(plotTitle)
+xlabel('x-coordinate in mm')
+ylabel('z-coordinate in mm')
+cb = colorbar;
+cb.Label.String = 'Intensity of the wave in the receiving transducers';
+file = string(['SectorScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
+saveas(gcf, file)
 %% focusedScan testing
+<<<<<<< HEAD
 D = 5*pitch;
 
 I = zeros(20);
@@ -102,6 +141,10 @@ for m = 1:aantalx+1
     end
 end
 imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)
+=======
+I = focusedScan(fmc,t,x,z,D,c,arraySetup);
+imagesc(x,z,I)
+>>>>>>> master
 plotTitle = ['FocusedScan at position (', num2str(xref), ',' , num2str(zref), ')' ];
 title(plotTitle)
 xlabel('x-coordinate in mm')
@@ -110,6 +153,7 @@ cb = colorbar;
 cb.Label.String = 'Intensity of the wave in the receiving transducers';
 file = string(['FocusedScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)
+<<<<<<< HEAD
 
 %% TFM testing
 I = zeros(20);
@@ -130,6 +174,11 @@ for m = 1:aantalx+1
     end
 end
 imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)
+=======
+%% TFM testing
+I = tfm(fmc,t,x,z, c, arraySetup);
+imagesc(x,z,I)
+>>>>>>> master
 plotTitle = ['TFM at position (', num2str(xref), ',' , num2str(zref), ')' ];
 title(plotTitle)
 xlabel('x-coordinate in mm')

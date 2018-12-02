@@ -46,7 +46,7 @@ title(plotTitle)
 xlabel('x-coordinate in mm')
 ylabel('z-coordinate in mm')
 cb = colorbar;
-cb.Label.String = 'Intensity of the wave in the receiving transducers';
+cb.Label.String('Intensity of the wave in the receiving transducers');
 file = string(['PlaneBScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)
 
@@ -72,14 +72,7 @@ for m = 1:aantalx+1
     end
 end
 imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)
-plotTitle = ['SectorScan at position (', num2str(xref), ',' , num2str(zref), ')' ];
-title(plotTitle)
-xlabel('x-coordinate in mm')
-ylabel('z-coordinate in mm')
-cb = colorbar;
-cb.Label.String = 'Intensity of the wave in the receiving transducers';
-file = string(['SectorScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
-saveas(gcf, file)
+colorbar
 
 %% focusedScan testing
 D = 5*pitch;
@@ -102,14 +95,7 @@ for m = 1:aantalx+1
     end
 end
 imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)
-plotTitle = ['FocusedScan at position (', num2str(xref), ',' , num2str(zref), ')' ];
-title(plotTitle)
-xlabel('x-coordinate in mm')
-ylabel('z-coordinate in mm')
-cb = colorbar;
-cb.Label.String = 'Intensity of the wave in the receiving transducers';
-file = string(['FocusedScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
-saveas(gcf, file)
+colorbar
 
 %% TFM testing
 I = zeros(20);
@@ -130,11 +116,5 @@ for m = 1:aantalx+1
     end
 end
 imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)
-plotTitle = ['TFM at position (', num2str(xref), ',' , num2str(zref), ')' ];
-title(plotTitle)
-xlabel('x-coordinate in mm')
-ylabel('z-coordinate in mm')
-cb = colorbar;
-cb.Label.String = 'Intensity of the wave in the receiving transducers';
-file = string(['TFM_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
-saveas(gcf, file)
+colorbar
+

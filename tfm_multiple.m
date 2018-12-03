@@ -40,11 +40,11 @@ x_in = intensity;
 x_out = x_in;
 
 for transmitter = 1:trans
+    xt = arraySetup(transmitter);
+    func_in = @(x,x_p,z_p) c_b/c_a*((x-xt)*((x-xt)^2 + z_in^2)^(-1/2)) - (x_p - x)*((x_p -x)^2 + (z_p-z_in)^2)^(-1/2);
+    
     for receiver = 1:trans
-        xt = arraySetup(transmitter);
         xr = arraySetup(receiver);
-        
-        func_in = @(x,x_p,z_p) c_b/c_a*((x-xt)*((x-xt)^2 + z_in^2)^(-1/2)) - (x_p - x)*((x_p -x)^2 + (z_p-z_in)^2)^(-1/2);
         func_out = @(x,x_p,z_p) c_a/c_b*((x-x_p)*((x-x_p)^2 + (z_p-z_in)^2)^(-1/2)) - (xr-x)*((xr-x)^2 + z_in^2)^(-1/2);
         
         for m = 1:length(xref)

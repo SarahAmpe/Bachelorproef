@@ -14,7 +14,7 @@ c = [c_a c_b c_b c_c];
 xref = -3;
 zref = 5.5;
 z_in = 5;
-numElements = 64;
+numElements = 32;
 elementWidth = 0.53;
 pitch = 0.63;
 waveInfo = [1, 5e6,t];
@@ -25,29 +25,23 @@ elementInfo = [numElements,elementWidth,pitch];
 
 %% Algemene testparameters
 % Invoerwaarden
-aantalx = 20; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 20;
+aantalx = 10; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 10;
 zmin = 0.05;
 zmax = 8;
 
 % Andere nodige waarden
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
-stepx = (numElements-1)*pitch/aantalx;
-stepz = (zmax-zmin)/aantalz;
-z = zmin:stepz:zmax;
-x = xmin:stepx:xmax;
+z = linspace(zmin,zmax,aantalz);
+x = linspace(xmin,xmax,aantalx);
 arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
 
 
 %% TFM testing (multiple layers)
-I = zeros(aantalz, aantalx);
-for m = 1:aantalx
-    for n = 1:aantalz
-        I(n,m) = tfm_multiple(fmc,t, x(m), z(n), z_in, c_a, c_b, arraySetup);
-    end
-end
-imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)
+figure
+I = tfm_multiple(fmc,t, x, z, z_in, c_a, c_b, arraySetup);
+imagesc(x,z,I)
 colorbar
 hold on
 plot([xmin,xmax],[z_in,z_in],'r','LineWidth',2)

@@ -20,6 +20,6 @@ sinB = sin(angles)*c_b/c_a;
 tau = (1:N)'*d*sinB/c_a - min((1:N)'*d*sinB/c_a); %c_a of c_b?
 M = repmat(zeros,length(angles),N);
 for w = 1:T
-    M(:,:,w) = (H(:,:,w)*exp(-1j*freq(w)*tau))';
+    M(:,:,w) = (H(:,:,w)*exp(-1j*freq(w)*tau))'; %dimensies in artikel?
 end
 M = real(ifft(M,[],3));

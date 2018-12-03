@@ -14,22 +14,20 @@ function intensity = PWI_image(pwi,t, gridx, gridz, z_in, c, arraySetup, angles)
 c_a = c(1);
 c_b = c(2);
 gridz = gridz';
-N = size(pwi,2);
+trans = length(arraySetup);
 
 intensity = zeros(length(gridz),length(gridx));
-intensity1 = intensity;
-x_out = intensity1;
+x_out = intensity;
 
 x_in = z_in * tan(angles);
 betas = asin(c_b/c_a*sin(angles));
 
-
 for n = 1:length(angles)
     n
     t_in(:,:) = (x_in(n)*sin(angles(n)) + z_in*cos(angles(n)))/c_a + ((gridx - x_in(n))*sin(betas(n)) + (gridz - z_in)*cos(betas(n)))/c_b;
-    for m = 1:N
+    for m = 1:trans
         xr = arraySetup(m);
-        func = @(x,x_p,z_p) c_a/c_b*((x-x_p)/sqrt((x-x_p)^2 + (z_p-z_in).^2)) - (xr-x)/sqrt((xr-x)^2 + z_in^2);
+        func = @(x,x_p,z_p) c_a/c_b*((x-x_p)*((x-x_p)^2 + (z_p-z_in)^2)^(-1/2)) - (xr-x)*((xr-x)^2 + z_in^2)^(-1/2);
         for l = 1:length(gridx)
             for k = 1:length(gridz)
                 x_out(k,l) = fzero(@(x) func(x,gridx(l),gridz(k)), (gridx(l) + xr)/2);
@@ -40,7 +38,6 @@ for n = 1:length(angles)
         signal = permute(pwi(n,m, :), [3 1 2]);
         signal = envelope(signal(:,:));
         I = interp1(t,signal,time);
-        intensity1 = intensity1 + I;
+        intensity = intensity + I;
     end
-    intensity = intensity + intensity1;
 end

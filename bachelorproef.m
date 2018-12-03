@@ -44,7 +44,7 @@ stepx = (numElements-1)*pitch/aantalx;
 stepz = (zmax-zmin)/aantalz;
 z = zmin:stepz:zmax;
 x = xmin:stepx:xmax;
-<<<<<<< HEAD
+
 I = zeros(length(z),length(x));
 for m = 1:length(x)
     tt = 2*z/c;
@@ -93,9 +93,6 @@ cb = colorbar;
 cb.Label.String = 'Intensity of the wave in the receiving transducers';
 file = string(['SectorScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)
-=======
-
->>>>>>> master
 
 %% planeScan testing
 I = planeScan(fmc,t,x,z,D,c,arraySetup);
@@ -120,7 +117,6 @@ cb.Label.String = 'Intensity of the wave in the receiving transducers';
 file = string(['SectorScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)
 %% focusedScan testing
-<<<<<<< HEAD
 D = 5*pitch;
 
 I = zeros(20);
@@ -141,10 +137,8 @@ for m = 1:aantalx+1
     end
 end
 imagesc(xmin:stepx:xmax,zmin:stepz:zmax,I)
-=======
 I = focusedScan(fmc,t,x,z,D,c,arraySetup);
 imagesc(x,z,I)
->>>>>>> master
 plotTitle = ['FocusedScan at position (', num2str(xref), ',' , num2str(zref), ')' ];
 title(plotTitle)
 xlabel('x-coordinate in mm')

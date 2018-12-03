@@ -1,8 +1,8 @@
 clear;
 close all;
-% addpath('0. Hulpfuncties')
-% addpath('1. Originele FMC en PWI')
-% addpath('2. Project lijm')
+addpath('Hulpfuncties')
+addpath('OrigineleFMCenPWI')
+addpath('MultipleLayers')
 
 %% FMC input (+ test wavefunctie)
 % Parameters
@@ -40,15 +40,13 @@ zmax = 10;
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
 arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
-stepx = (numElements-1)*pitch/aantalx;
-stepz = (zmax-zmin)/aantalz;
-z = zmin:stepz:zmax;
-x = xmin:stepx:xmax;
+z = linspace(zmin,zmax,aantalz);
+x = linspace(xmin,xmax,aantalx);
 
 
 %% planeScan testing
 I = planeScan(fmc,t,x,z,D,c,arraySetup);
-imagesc(xmin:stepx:xmax, (zmin:stepz:zmax), I)
+imagesc(x, z, I)
 plotTitle = ['PlaneBScan at position (', num2str(xref), ',' , num2str(zref), ')' ];
 title(plotTitle)
 xlabel('x-coordinate in mm')
@@ -57,6 +55,7 @@ cb = colorbar;
 cb.Label.String = 'Intensity of the wave in the receiving transducers';
 file = string(['PlaneBScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)
+
 %% sectorScan testing
 I = sectorScan(fmc,t,x,z,c,arraySetup);
 imagesc(x,z,I)
@@ -68,6 +67,7 @@ cb = colorbar;
 cb.Label.String = 'Intensity of the wave in the receiving transducers';
 file = string(['SectorScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)
+
 %% focusedScan testing
 I = focusedScan(fmc,t,x,z,D,c,arraySetup);
 imagesc(x,z,I)
@@ -79,6 +79,7 @@ cb = colorbar;
 cb.Label.String = 'Intensity of the wave in the receiving transducers';
 file = string(['FocusedScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)
+
 %% TFM testing
 I = tfm(fmc,t,x,z, c, arraySetup);
 imagesc(x,z,I)

@@ -19,7 +19,7 @@ plot(t,wave(1,5e6,t));
 waveInfo = [1, 5e6,t];
 materialInfo = [c,xref,zref];
 elementInfo = [numElements,elementWidth,pitch];
-[fmc,S] = FMC(waveInfo,materialInfo,elementInfo);
+[fmc,~] = FMC(waveInfo,materialInfo,elementInfo);
 
 % Extra defecten toevoegen
 fmc = fmc + FMC(waveInfo,[c,-15,2],elementInfo);
@@ -49,20 +49,44 @@ x = xmin:stepx:xmax;
 %% planeScan testing
 I = planeScan(fmc,t,x,z,D,c,arraySetup);
 imagesc(xmin:stepx:xmax, (zmin:stepz:zmax), I)
-colorbar
-title('Plane B-scan')
+plotTitle = ['PlaneBScan at position (', num2str(xref), ',' , num2str(zref), ')' ];
+title(plotTitle)
+xlabel('x-coordinate in mm')
+ylabel('z-coordinate in mm')
+cb = colorbar;
+cb.Label.String = 'Intensity of the wave in the receiving transducers';
+file = string(['PlaneBScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
+saveas(gcf, file)
 %% sectorScan testing
 I = sectorScan(fmc,t,x,z,c,arraySetup);
 imagesc(x,z,I)
-colorbar
-title('Sector B-scan')
+plotTitle = ['SectorScan at position (', num2str(xref), ',' , num2str(zref), ')' ];
+title(plotTitle)
+xlabel('x-coordinate in mm')
+ylabel('z-coordinate in mm')
+cb = colorbar;
+cb.Label.String = 'Intensity of the wave in the receiving transducers';
+file = string(['SectorScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
+saveas(gcf, file)
 %% focusedScan testing
 I = focusedScan(fmc,t,x,z,D,c,arraySetup);
 imagesc(x,z,I)
-colorbar
-title('Focused B-scan')
+plotTitle = ['FocusedScan at position (', num2str(xref), ',' , num2str(zref), ')' ];
+title(plotTitle)
+xlabel('x-coordinate in mm')
+ylabel('z-coordinate in mm')
+cb = colorbar;
+cb.Label.String = 'Intensity of the wave in the receiving transducers';
+file = string(['FocusedScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
+saveas(gcf, file)
 %% TFM testing
 I = tfm(fmc,t,x,z, c, arraySetup);
 imagesc(x,z,I)
-colorbar
-title('Total Focusing Method')
+plotTitle = ['TFM at position (', num2str(xref), ',' , num2str(zref), ')' ];
+title(plotTitle)
+xlabel('x-coordinate in mm')
+ylabel('z-coordinate in mm')
+cb = colorbar;
+cb.Label.String = 'Intensity of the wave in the receiving transducers';
+file = string(['TFM_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
+saveas(gcf, file)

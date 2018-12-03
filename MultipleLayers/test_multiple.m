@@ -5,7 +5,7 @@ close all;
 % addpath('2. Project lijm')
 
 %% FMC multiple input (+ test wavefunctie)
-t = linspace(-1e-5, 1e-5, 2048); 
+t = linspace(-1e-5, 1e-5, 2048);
 plot(t,wave(1,5e6,t));
 c_a = 6.3e6; % Longitudinaal in aluminium
 c_b = 1.5e6; % Sound velocity in water
@@ -33,8 +33,8 @@ zmax = 8;
 % Andere nodige waarden
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
-z = linspace(zmin,zmax,aantalz);
-x = linspace(xmin,xmax,aantalx);
+z = linspace(zmin, zmax, aantalz);
+x = linspace(xmin, xmax, aantalx);
 arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
 
 

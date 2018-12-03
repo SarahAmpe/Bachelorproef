@@ -19,7 +19,7 @@ plot(t,wave(1,5e6,t));
 waveInfo = [1, 5e6,t];
 materialInfo = [c,xref,zref];
 elementInfo = [numElements,elementWidth,pitch];
-[fmc,S] = FMC(waveInfo,materialInfo,elementInfo);
+[fmc,~] = FMC(waveInfo,materialInfo,elementInfo);
 
 % Extra defecten toevoegen
 fmc = fmc + FMC(waveInfo,[c,-15,2],elementInfo);

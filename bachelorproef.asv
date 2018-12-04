@@ -6,7 +6,7 @@ addpath('MultipleLayers')
 
 %% FMC input (+ test wavefunctie)
 % Parameters
-t = linspace(-1.2e-5, 1.2e-5, 4096);
+t = linspace(0e-5, 2e-5, 2048);
 c = 7e6;
 xref = 12;
 zref = 2.3;
@@ -22,25 +22,25 @@ elementInfo = [numElements,elementWidth,pitch];
 [fmc,~] = FMC(waveInfo,materialInfo,elementInfo);
 
 % Extra defecten toevoegen
-fmc = fmc + FMC(waveInfo,[c,-17,2],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-17,3],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-17,4],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-17,5],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-13,4],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-13,3],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-7,3.5],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-4,2.7],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-4,4.2],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,0,2],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,0,5],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,5,1.5],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,5,5.5],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,10,2],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,10,5],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,13,4],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,13,3],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,17,3.5],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,12,4.8],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-17,2],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-17,3],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-17,4],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-17,5],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-13,4],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-13,3],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-7,3.5],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-4,2.7],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-4,4.2],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,0,2],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,0,5],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,5,1.5],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,5,5.5],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,10,2],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,10,5],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,13,4],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,13,3],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,17,3.5],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,12,4.8],elementInfo);
 
 %% Algemene testparameters
 % Invoerwaarden

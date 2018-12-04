@@ -24,7 +24,7 @@ betas = asin(c_b/c_a*sin(angles));
 
 for n = 1:length(angles)
     n
-    t_in(:,:) = (x_in(n)*sin(angles(n)) + z_in*cos(angles(n)))/c_a + ((gridx - x_in(n))*sin(betas(n)) + (gridz - z_in)*cos(betas(n)))/c_b;
+    t_in(:,:) = repmat(z_in/(cos(angles(n))*c_a) + (gridz-z_in)/(cos(betas(n))*c_b),1,length(gridx));
     for m = 1:trans
         xr = arraySetup(m);
         func = @(x,x_p,z_p) c_a/c_b*((x-x_p)*((x-x_p)^2 + (z_p-z_in)^2)^(-1/2)) - (xr-x)*((xr-x)^2 + z_in^2)^(-1/2);

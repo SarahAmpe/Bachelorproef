@@ -8,8 +8,8 @@ addpath('MultipleLayers')
 % Parameters
 t = linspace(-1.2e-5, 1.2e-5, 4096);
 c = 7e6;
-xref = 12;
-zref = 2.3;
+xref = 0;
+zref = 3;
 numElements = 64;
 elementWidth = 0.53;
 pitch = 0.63;
@@ -22,26 +22,37 @@ elementInfo = [numElements,elementWidth,pitch];
 [fmc,~] = FMC(waveInfo,materialInfo,elementInfo);
 
 % Extra defecten toevoegen
-fmc = fmc + FMC(waveInfo,[c,-17,2],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-17,3],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-17,4],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-17,5],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-13,4],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-13,3],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-7,3.5],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-4,2.7],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-4,4.2],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,0,2],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,0,5],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,5,1.5],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,5,5.5],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,10,2],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,10,5],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,13,4],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,13,3],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,17,3.5],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,12,4.8],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-17,2],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-17,3],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-17,4],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-17,5],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-13,4],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-13,3],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-7,3.5],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-4,2.7],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-4,4.2],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,0,2],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,0,5],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,5,1.5],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,5,5.5],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,10,2],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,10,5],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,13,4],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,13,3],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,17,3.5],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,12,4.8],elementInfo);
 
+% pi-figuur
+fmc = fmc + FMC(waveInfo,[c,-15,4],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,- 7,3],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,  7,3],elementInfo);
+fmc = fmc + FMC(waveInfo,[c, 15,2],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,- 5,4.5],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,  5,4.5],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,- 5,6],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,  5,6],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,-6,8],elementInfo);
+fmc = fmc + FMC(waveInfo,[c, 6,8],elementInfo);
 %% Algemene testparameters
 % Invoerwaarden
 D = 5*pitch; % Aperture width
@@ -59,8 +70,9 @@ x = linspace(xmin,xmax,aantalx);
 
 
 %% planeScan testing
+figure
 I = planeScan(fmc,t,x,z,D,c,arraySetup);
-imagesc(x, z, I)
+imagesc(x, z, I/max(max(I)))
 plotTitle = ['PlaneBScan at position (', num2str(xref), ',' , num2str(zref), ')' ];
 title(plotTitle)
 xlabel('x-coordinate in mm')
@@ -71,8 +83,9 @@ file = string(['PlaneBScan_at_position_(', num2str(xref), ',' , num2str(zref), '
 saveas(gcf, file)
 
 %% sectorScan testing
+figure
 I = sectorScan(fmc,t,x,z,c,arraySetup);
-imagesc(x,z,I)
+imagesc(x,z,I/max(max(I)))
 plotTitle = ['SectorScan at position (', num2str(xref), ',' , num2str(zref), ')' ];
 title(plotTitle)
 xlabel('x-coordinate in mm')
@@ -83,8 +96,9 @@ file = string(['SectorScan_at_position_(', num2str(xref), ',' , num2str(zref), '
 saveas(gcf, file)
 
 %% focusedScan testing
+figure
 I = focusedScan(fmc,t,x,z,D,c,arraySetup);
-imagesc(x,z,I)
+imagesc(x,z,I/max(max(I)))
 plotTitle = ['FocusedScan at position (', num2str(xref), ',' , num2str(zref), ')' ];
 title(plotTitle)
 xlabel('x-coordinate in mm')
@@ -95,8 +109,9 @@ file = string(['FocusedScan_at_position_(', num2str(xref), ',' , num2str(zref), 
 saveas(gcf, file)
 
 %% TFM testing
+figure
 I = tfm(fmc,t,x,z, c, arraySetup);
-imagesc(x,z,I)
+imagesc(x,z,I/max(max(I)))
 plotTitle = ['TFM at position (', num2str(xref), ',' , num2str(zref), ')' ];
 title(plotTitle)
 xlabel('x-coordinate in mm')

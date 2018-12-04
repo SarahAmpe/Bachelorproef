@@ -1,30 +1,43 @@
-function intensity = PWI_image(pwi,t, xref, zref, z_in, c_a, c_b, arraySetup,angles)
+function intensity = PWI_image(pwi,t, gridx, gridz, z_in, c, arraySetup, angles)
+% PWI_IMAGE Calculates intensity of the PWI-technique at all (x,z) pairs for a multiple-layered material
+% INPUT:
+    % pwi        = pwi matrix of time domain signals
+    % t          = time sequence of fullMat
+    % gridx      = positions of the points of interest along the array axis
+    % gridz      = positions of the points of interest normal to the array surface
+    % c          = sound speed in the media
+    % arraySetup = vector of x coordinates of the array elements
+    % angles     = vector with all different angels used for transmission
+% OUTPUT:
+    % intensity  = values of the intensity of the PWI image
 
-zref = zref';
-intensity = zeros(length(zref),length(xref));
-intensity1 = zeros(length(zref),length(xref));
-alphas = asin(c_a/c_b*sin(angles));
-x_in = z_in * tan(alphas);
+c_a = c(1);
+c_b = c(2);
+gridz = gridz';
+trans = length(arraySetup);
 
-N = size(pwi,2);
-x_out = zeros(length(zref),length(xref));
+intensity = zeros(length(gridz),length(gridx));
+x_out = intensity;
+
+x_in = z_in * tan(angles);
+betas = asin(c_b/c_a*sin(angles));
+
 for n = 1:length(angles)
     n
-    t_in(:,:) = (x_in(n)*sin(alphas(n)) + z_in*cos(alphas(n)))/c_a + ((xref - x_in(n))*sin(angles(n)) + (zref - z_in)*cos(angles(n)))/c_b;
-    for m = 1:N
+    t_in(:,:) = (x_in(n)*sin(angles(n)) + z_in*cos(angles(n)))/c_a + ((gridx - x_in(n))*sin(betas(n)) + (gridz - z_in)*cos(betas(n)))/c_b;
+    for m = 1:trans
         xr = arraySetup(m);
-        func = @(x,x_p,z_p) c_a/c_b*((x-x_p)./sqrt((x-x_p)^2 + (z_p-z_in).^2)) - (xr-x)./sqrt((xr-x)^2 + z_in^2);
-        for l = 1:length(xref)
-            for k = 1:length(zref)
-                x_out(k,l) = fzero(@(x) func(x,xref(l),zref(k)), (xref(l) + xr)/2);
+        func = @(x,x_p,z_p) c_a/c_b*((x-x_p)*((x-x_p)^2 + (z_p-z_in)^2)^(-1/2)) - (xr-x)*((xr-x)^2 + z_in^2)^(-1/2);
+        for l = 1:length(gridx)
+            for k = 1:length(gridz)
+                x_out(k,l) = fzero(@(x) func(x,gridx(l),gridz(k)), (gridx(l) + xr)/2);
             end
         end
-        t_out = sqrt((xr-x_out).^2 + z_in^2)./c_a + sqrt((xref - x_out).^2 + (z_in - zref).^2)./c_b;
+        t_out = sqrt((xr-x_out).^2 + z_in^2)/c_a + sqrt((gridx - x_out).^2 + (z_in - gridz).^2)/c_b;
         time = t_in + t_out;
         signal = permute(pwi(n,m, :), [3 1 2]);
         signal = envelope(signal(:,:));
         I = interp1(t,signal,time);
-        intensity1 = intensity1 + I;
+        intensity = intensity + I;
     end
-    intensity = intensity + intensity1;
 end

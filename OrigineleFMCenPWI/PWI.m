@@ -10,14 +10,11 @@ function M = PWI(t,H,angles,pitch,c)
     % M = matrix of time-domain signals
 
 d = pitch ;
-c_a = c(1);
-c_b = c(2);
 
 N = size(H,1); % Number of elements
 T = size(H,3);
 freq = (0:T-1)/T/(t(2)-t(1));
-sinB = sin(angles)*c_b/c_a;
-tau = (1:N)'*d*sinB/c_a - min((1:N)'*d*sinB/c_a); %c_a of c_b?
+tau = (1:N)'*d*angles/c - min((1:N)'*d*angles/c); 
 M = repmat(zeros,length(angles),N);
 for w = 1:T
     M(:,:,w) = conj(H(:,:,w)*exp(-1j*freq(w)*tau))';

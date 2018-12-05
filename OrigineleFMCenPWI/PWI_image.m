@@ -1,4 +1,4 @@
-function intensity = PWI_image(pwi,t, gridx, gridz, z_in, c, arraySetup, angles)
+function intensity = PWI_image(pwi,t, gridx, gridz, c, arraySetup, angles)
 % PWI_IMAGE Calculates intensity of the PWI-technique at all (x,z) pairs for a multiple-layered material
 % INPUT:
     % pwi        = pwi matrix of time domain signals
@@ -11,30 +11,17 @@ function intensity = PWI_image(pwi,t, gridx, gridz, z_in, c, arraySetup, angles)
 % OUTPUT:
     % intensity  = values of the intensity of the PWI image
 
-c_a = c(1);
-c_b = c(2);
 gridz = gridz';
 trans = length(arraySetup);
 
 intensity = zeros(length(gridz),length(gridx));
-x_out = intensity;
-
-x_in = z_in * tan(angles);
-betas = asin(c_b/c_a*sin(angles));
 
 for n = 1:length(angles)
     n
-    t_in(:,:) = repmat(z_in/(cos(angles(n))*c_a) + (gridz-z_in)/(cos(betas(n))*c_b),1,length(gridx));
+    time = gridz/(cos(angles(n))*c);
     for m = 1:trans
         xr = arraySetup(m);
-        func = @(x,x_p,z_p) c_a/c_b*((x-x_p)*((x-x_p)^2 + (z_p-z_in)^2)^(-1/2)) - (xr-x)*((xr-x)^2 + z_in^2)^(-1/2);
-        for l = 1:length(gridx)
-            for k = 1:length(gridz)
-                x_out(k,l) = fzero(@(x) func(x,gridx(l),gridz(k)), (gridx(l) + xr)/2);
-            end
-        end
-        t_out = sqrt((xr-x_out).^2 + z_in^2)/c_a + sqrt((gridx - x_out).^2 + (z_in - gridz).^2)/c_b;
-        time = t_in + t_out;
+        time = time + sqrt((gridx-xr).^2 + (gridz).^2)/c;
         signal = permute(pwi(n,m, :), [3 1 2]);
         signal = envelope(signal(:,:));
         I = interp1(t,signal,time);

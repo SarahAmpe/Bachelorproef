@@ -68,7 +68,7 @@ angles = linspace(-pi/20,pi/20,120);
 pwi = PWI(t,S,angles,pitch,c);
 
 I = PWI_image(pwi,t, x, z, z_in, [c_a, c_b], arraySetup,angles);
-imagesc(x,z,I)
+imagesc(x,z,I/max(max(I)))
 colorbar
 hold on
 plot([xmin,xmax],[z_in,z_in],'r','LineWidth',2)

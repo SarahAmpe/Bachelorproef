@@ -24,19 +24,18 @@ elementInfo = [numElements,elementWidth,pitch];
 [fmc,~] = FMC_multiple(waveInfo,materialInfo,elementInfo);
 
 %% Algemene testparameters
-arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
 % Invoerwaarden
 aantalx = 10; % Nauwkeurigheid (aantal punten dat je wilt plotten)
 aantalz = 10;
-zmin = arraySetup(end)/tan(pi/3);
-zmax = 15;
+zmin = 0.05;
+zmax = 8;
 
 % Andere nodige waarden
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
 z = linspace(zmin,zmax,aantalz);
 x = linspace(xmin,xmax,aantalx);
-
+arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
 
 
 %% TFM testing (multiple layers)
@@ -52,7 +51,7 @@ hold off
 t = linspace(-1e-4, 1e-4, 2048); 
 c = 6.3e6;
 xref = 5;
-zref = 8;
+zref = 6;
 numElements = 32;
 elementWidth = 0.53;
 pitch = 0.63;
@@ -67,3 +66,4 @@ pwi = PWI(t,S,angles,pitch,c);
 I = PWI_image(pwi,t, x, z, c, arraySetup,angles);
 imagesc(x,z,I/max(max(I)))
 colorbar
+hold on

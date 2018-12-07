@@ -94,4 +94,11 @@ pwi = PWI(t,S,angles,pitch,c);
 figure
 I = PWI_image(pwi,t, x, z, c, arraySetup,angles);
 imagesc(x,z,I/max(max(I)))
-colorbar
+plotTitle = ['PWIsingle at position (', num2str(xref), ',' , num2str(zref), ')' ];
+title(plotTitle)
+xlabel('x-coordinate in mm')
+ylabel('z-coordinate in mm')
+cb = colorbar;
+cb.Label.String = 'Intensity of the wave in the receiving transducers';
+file = string(['PWIsingle_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
+saveas(gcf, file)

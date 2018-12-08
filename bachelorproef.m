@@ -43,16 +43,16 @@ elementInfo = [numElements,elementWidth,pitch];
 % fmc = fmc + FMC(waveInfo,[c,12,4.8],elementInfo);
 
 % pi-figuur
-fmc = fmc + FMC(waveInfo,[c,-15,4],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,- 7,3],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,  7,3],elementInfo);
-fmc = fmc + FMC(waveInfo,[c, 15,2],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,- 5,4.5],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,  5,4.5],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,- 5,6],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,  5,6],elementInfo);
-fmc = fmc + FMC(waveInfo,[c,-6,8],elementInfo);
-fmc = fmc + FMC(waveInfo,[c, 6,8],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-15,4],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,- 7,3],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,  7,3],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c, 15,2],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,- 5,4.5],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,  5,4.5],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,- 5,6],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,  5,6],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c,-6,8],elementInfo);
+% fmc = fmc + FMC(waveInfo,[c, 6,8],elementInfo);
 %% Algemene testparameters
 % Invoerwaarden
 D = 5*pitch; % Aperture width
@@ -119,4 +119,53 @@ ylabel('z-coordinate in mm')
 cb = colorbar;
 cb.Label.String = 'Intensity of the wave in the receiving transducers';
 file = string(['TFM_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
+saveas(gcf, file)
+
+%% PWI testing (single layer)
+% testparameters:
+t = linspace(-1e-4, 1e-4, 2^12); 
+c = 6.3e6;
+xref = 12;
+zref = 18;
+numElements = 64;
+elementWidth = 0.53;
+pitch = 0.63;
+waveInfo = [1, 5e6,t]; %gaussian window best op 1000
+elementInfo = [numElements,elementWidth,pitch];
+arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
+
+% FMC simulatie
+[~,S] = FMC(waveInfo,[c,-3,15],elementInfo);
+% [~,S1] = FMC(waveInfo,[c,-2,15],elementInfo);
+% [~,S2] = FMC(waveInfo,[c,-1,15],elementInfo);
+% [~,S3] = FMC(waveInfo,[c, 0,15],elementInfo);
+% [~,S4] = FMC(waveInfo,[c, 1,15],elementInfo);
+% [~,S5] = FMC(waveInfo,[c, 2,15],elementInfo);
+% [~,S6] = FMC(waveInfo,[c, 3,15],elementInfo);
+% S = S + S1 + S2 + S3 + S4 + S5 + S6;
+
+% PWI simulatie
+angles = linspace(-pi/3,pi/3,120);
+aantalx = 64;
+aantalz = 64;
+zmin = arraySetup(end)/tan(angles(end));
+zmax = 20;
+xmin = -(numElements-1)*pitch/2;
+xmax = (numElements-1)*pitch/2;
+z = linspace(zmin,zmax,aantalz);
+x = linspace(xmin,xmax,aantalx);
+
+pwi = PWI(t,S,angles,pitch,c);
+
+% figuur
+figure
+I = PWI_image(pwi,t, x, z, c, arraySetup,angles);
+imagesc(x,z,I/max(max(I)))
+plotTitle = ['PWIsingle at position (', num2str(xref), ',' , num2str(zref), ')' ];
+title(plotTitle)
+xlabel('x-coordinate in mm')
+ylabel('z-coordinate in mm')
+cb = colorbar;
+cb.Label.String = 'Intensity of the wave in the receiving transducers';
+file = string(['PWIsingle_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)

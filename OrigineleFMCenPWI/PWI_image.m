@@ -13,18 +13,18 @@ function intensity = PWI_image(pwi,t, gridx, gridz, c, arraySetup, angles)
 
 gridz = gridz';
 trans = length(arraySetup);
-
 intensity = zeros(length(gridz),length(gridx));
 
-for n = 1:length(angles)
-    n
-    time = gridz/(cos(angles(n))*c);
-    for m = 1:trans
-        xr = arraySetup(m);
-        time = time + sqrt((gridx-xr).^2 + (gridz).^2)/c;
+for m = 1:trans
+    xr = arraySetup(m);
+    time = sqrt((gridx-xr).^2 + (gridz).^2)/c;
+    for n = 1:length(angles)
+        time = time + gridz/cos(angles(n))/c ;
         signal = permute(pwi(n,m, :), [3 1 2]);
         signal = envelope(signal(:,:));
         I = interp1(t,signal,time);
         intensity = intensity + I;
     end
 end
+% (gridx*sin(angles(n)) + gridz*cos(angles(n)))/c
+% sqrt(gridx.^2 + gridz.^2)/c

@@ -40,6 +40,18 @@ x = linspace(xmin,xmax,aantalx);
 
 
 %% TFM testing (multiple layers)
+% testparameters:
+arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
+aantalx = 10; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 10;
+zmin = 0.05;
+zmax = 15;
+xmin = -(numElements-1)*pitch/2;
+xmax = (numElements-1)*pitch/2;
+z = linspace(zmin,zmax,aantalz);
+x = linspace(xmin,xmax,aantalx);
+
+% figuur
 figure
 I = tfm_multiple(fmc,t, x, z, z_in, [c_a,c_b], arraySetup);
 imagesc(x,z,I)
@@ -48,22 +60,45 @@ hold on
 plot([xmin,xmax],[z_in,z_in],'r','LineWidth',2)
 hold off
 
-%% PWI testing (multiple layers)
+%% PWI testing (single layer)
+% testparameters:
 t = linspace(-1e-4, 1e-4, 2048); 
 c = 6.3e6;
 xref = 5;
-zref = 8;
-numElements = 32;
+zref = 12;
+numElements = 64;
 elementWidth = 0.53;
 pitch = 0.63;
-waveInfo = [1, 5e6,t];
+waveInfo = [1, 5e6,t]; %gaussian window best op 1000
 materialInfo = [c,xref,zref];
 elementInfo = [numElements,elementWidth,pitch];
+arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
+
+% FMC simulatie
 [~,S] = FMC(waveInfo,materialInfo,elementInfo);
 
+% PWI simulatie
 angles = linspace(-pi/3,pi/3,120);
+aantalx = 20;
+aantalz = 20;
+zmin = arraySetup(end)/tan(angles(end));
+zmax = 15;
+xmin = -(numElements-1)*pitch/2;
+xmax = (numElements-1)*pitch/2;
+z = linspace(zmin,zmax,aantalz);
+x = linspace(xmin,xmax,aantalx);
+
 pwi = PWI(t,S,angles,pitch,c);
 
+% figuur
+figure
 I = PWI_image(pwi,t, x, z, c, arraySetup,angles);
 imagesc(x,z,I/max(max(I)))
-colorbar
+plotTitle = ['PWIsingle at position (', num2str(xref), ',' , num2str(zref), ')' ];
+title(plotTitle)
+xlabel('x-coordinate in mm')
+ylabel('z-coordinate in mm')
+cb = colorbar;
+cb.Label.String = 'Intensity of the wave in the receiving transducers';
+file = string(['PWIsingle_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
+saveas(gcf, file)

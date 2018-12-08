@@ -8,6 +8,7 @@ function signal = wave(A,f,t)
     % signal = gaussian windowed cosinus signal.
 
 wave = A*cos(2*pi*f*t);
-signal = gausswin(length(wave),200)'.*wave;
+% wave = A*sinc(pi*t);
+signal = gausswin(length(wave),2000)'.*wave;
 
 end

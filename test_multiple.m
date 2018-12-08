@@ -9,12 +9,11 @@ t = linspace(-1e-5, 1e-5, 2048);
 plot(t,wave(1,5e6,t));
 c_a = 6.3e6; % Longitudinaal in aluminium
 c_b = 1.5e6; % Sound velocity in water
-c_c = 3.1e6; % Transversaal in aluminium
-c = [c_a c_b c_b c_c];
-xref = -3;
+c = [c_a c_b c_a];
+xref = 0;
 zref = 5.5;
-z_in = 5;
-numElements = 32;
+z_in = [5,6];
+numElements = 16;
 elementWidth = 0.53;
 pitch = 0.63;
 waveInfo = [1, 5e6,t];
@@ -23,29 +22,13 @@ elementInfo = [numElements,elementWidth,pitch];
 
 [fmc,~] = FMC_multiple(waveInfo,materialInfo,elementInfo);
 
-%% Algemene testparameters
-arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
-% Invoerwaarden
-aantalx = 10; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 10;
-zmin = arraySetup(end)/tan(pi/3);
-zmax = 15;
-
-% Andere nodige waarden
-xmin = -(numElements-1)*pitch/2;
-xmax = (numElements-1)*pitch/2;
-z = linspace(zmin,zmax,aantalz);
-x = linspace(xmin,xmax,aantalx);
-
-
-
 %% TFM testing (multiple layers)
 % testparameters:
 arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
-aantalx = 10; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 10;
-zmin = 0.05;
-zmax = 15;
+aantalx = 35; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 35;
+zmin = 4;
+zmax = 7;
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
 z = linspace(zmin,zmax,aantalz);
@@ -53,46 +36,52 @@ x = linspace(xmin,xmax,aantalx);
 
 % figuur
 figure
-I = tfm_multiple(fmc,t, x, z, z_in, [c_a,c_b], arraySetup);
+I = tfm_multiple(fmc,t, x, z, z_in(1), [c_a,c_b], arraySetup);
 imagesc(x,z,I)
 colorbar
 hold on
-plot([xmin,xmax],[z_in,z_in],'r','LineWidth',2)
+plot([xmin,xmax],[z_in(1),z_in(1)],'r','LineWidth',2)
+plot([xmin,xmax],[z_in(2),z_in(2)],'r','LineWidth',2)
 hold off
 
-%% PWI testing (single layer)
+
+%% PWI testing (multiple layers)
 % testparameters:
 t = linspace(-1e-4, 1e-4, 2048); 
-c = 6.3e6;
-xref = 5;
-zref = 12;
-numElements = 64;
+c_a = 6.3e6; 
+c_b = 1.5e6;
+c = [c_a,c_b,c_a];
+z_in = [5,6];
+xref = 0;
+zref = 5.5;
+numElements = 16;
 elementWidth = 0.53;
 pitch = 0.63;
-waveInfo = [1, 5e6,t]; %gaussian window best op 1000
-materialInfo = [c,xref,zref];
-elementInfo = [numElements,elementWidth,pitch];
+waveInfo = [1, 5e6,t];
+materialInfo = [xref,zref,z_in,c];
+elementInfo = [numElements,elementWidth,pitch,c];
 arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
 
 % FMC simulatie
-[~,S] = FMC(waveInfo,materialInfo,elementInfo);
+[~,S] = FMC_multiple(waveInfo,materialInfo,elementInfo);
 
 % PWI simulatie
-angles = linspace(-pi/3,pi/3,120);
-aantalx = 20;
-aantalz = 20;
-zmin = arraySetup(end)/tan(angles(end));
-zmax = 15;
+aantalx = 35;
+aantalz = 35;
+zmin = 4;
+zmax = 7;
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
 z = linspace(zmin,zmax,aantalz);
 x = linspace(xmin,xmax,aantalx);
+thetamax = atan(zmin/arraySetup(end));
+angles = linspace(-thetamax,thetamax,60);
 
-pwi = PWI(t,S,angles,pitch,c);
+pwi = PWI(t,S,angles,pitch,c(1));
 
 % figuur
 figure
-I = PWI_image(pwi,t, x, z, c, arraySetup,angles);
+I = PWI_image_multiple(pwi,t, x, z, z_in(1), c, arraySetup,angles);
 imagesc(x,z,I/max(max(I)))
 plotTitle = ['PWIsingle at position (', num2str(xref), ',' , num2str(zref), ')' ];
 title(plotTitle)
@@ -100,5 +89,10 @@ xlabel('x-coordinate in mm')
 ylabel('z-coordinate in mm')
 cb = colorbar;
 cb.Label.String = 'Intensity of the wave in the receiving transducers';
-file = string(['PWIsingle_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
+hold on
+plot([xmin,xmax],[z_in(1),z_in(1)],'r','LineWidth',2)
+plot([xmin,xmax],[z_in(2),z_in(2)],'r','LineWidth',2)
+hold off
+file = string(['PWImultiple_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)
+

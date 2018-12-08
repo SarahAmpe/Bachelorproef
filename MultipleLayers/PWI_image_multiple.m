@@ -28,7 +28,6 @@ for m = 1:trans
     xr = arraySetup(m);
     func_out = @(x,x_p,z_p) c_a/c_b*((x-x_p)*((x-x_p)^2 + (z_p-z_in)^2)^(-1/2)) - (xr-x)*((xr-x)^2 + z_in^2)^(-1/2);
     for n = 1:length(angles)
-        x_in = z_in*tan(angles(n));
         for l = 1:length(gridz)
             if gridz(l) > z_in
                 timeIn(l,:) = z_in/cos(angles(n))/c_a + (gridz(l) - z_in)/cos(betas(n))/c_b ;

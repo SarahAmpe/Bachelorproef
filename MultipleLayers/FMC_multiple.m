@@ -20,12 +20,10 @@ t = waveInfo(3:end);
 
 xref = materialInfo(1); % Defect
 zref = materialInfo(2);
-z_in = materialInfo(3); %Thickness of first material
-c = materialInfo(4:end);
+z_in = materialInfo(3:4); %Thickness of first material
+c = materialInfo(5:end);
 c_a = c(1);
 c_b = c(2);
-%c_c = c(3); %When considering longitudinal? waves these velocities will be the same
-%c_d = c(4);
 
 numElements = elementInfo(1); 
 elementWidth = elementInfo(2);
@@ -44,24 +42,26 @@ freq = permute((0:N-1)/N/(t(2)-t(1)),[1,3,2]);
 % Calculating propagation distance, directivity functions and signal amplitude
 xt = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);  % x=0 is the centre of the phased array
 xr = xt';
+
+% reflections on defect
 x = (xt + xref)./2;
 x_in = zeros(1,numElements);
 for n = 1:numElements
-    func = @(x) c_b/c_a*((x-xt(n))*((x-xt(n))^2 + z_in^2)^(-1/2)) - (xref - x)*((xref -x)^2 + (zref-z_in)^2)^(-1/2);
+    func = @(x) c_b/c_a*((x-xt(n))*((x-xt(n))^2 + z_in(1)^2)^(-1/2)) - (xref - x)*((xref -x)^2 + (zref-z_in(1))^2)^(-1/2);
     x_in(n) = fzero(func, x(n)); %Position where ingoing wave transits into the other material 
 end
 
 x = (xref + xr)./2;
 x_out = zeros(numElements,1);
 for n = 1:numElements
-    func = @(x) c_a/c_b*((x-xref)*((x-xref)^2 + (zref-z_in)^2)^(-1/2)) - (xr(n)-x)*((xr(n)-x)^2 + z_in^2)^(-1/2);
+    func = @(x) c_a/c_b*((x-xref)*((x-xref)^2 + (zref-z_in(1))^2)^(-1/2)) - (xr(n)-x)*((xr(n)-x)^2 + z_in(1)^2)^(-1/2);
     x_out(n) = fzero(func, x(n)); %Position where outgoing wave transits into the other material 
 end
 
-dt1 = ((xt-x_in).^2+(z_in)^2).^(1/2);
-dt2 = ((x_in - xref).^2 + (z_in - zref)^2).^(1/2);
-dr1 = ((xr-x_out).^2 + z_in^2).^(1/2);
-dr2 = ((x_out-xref).^2 + (zref-z_in)^2).^(1/2);
+dt1 = ((xt-x_in).^2+(z_in(1))^2).^(1/2);
+dt2 = ((x_in - xref).^2 + (z_in(1) - zref)^2).^(1/2);
+dr1 = ((xr-x_out).^2 + z_in(1)^2).^(1/2);
+dr2 = ((x_out-xref).^2 + (zref-z_in(1))^2).^(1/2);
 d1 = dt1 + dr1; % Propagation distance
 d2 = dt2 + dr2;
 
@@ -74,20 +74,47 @@ pr = pr1 .* pr2;
 A = A./sqrt((dr1+dr2)*(dt1+dt2)); % Signal amplitude after propagation
 
 % Complex spectrum for each transmitter-receiver pair
-
 G = F.*exp(-1i*(2*pi*freq).*(d1/c_a + d2/c_b)); 
 H = pr*pt.*A.*G;
+
+% % reflections on first layer:
+% dt = sqrt(((xt-xr)/2).^2 + (z_in(1))^.2); 
+% dr = dt';
+% d = dt + dr;
+% pt = sinc(pi*elementWidth*(abs(xt -xr)/2./dt)/lambda1);
+% pr = sinc(pi*elementWidth*(abs(xt -xr)/2./dr)/lambda1);
+% pt = pt .* pt;
+% A = A./sqrt(dr*dt);
+% 
+% % Complex spectrum for each transmitter-receiver pair
+% G = F.*exp(-1i*(2*pi*freq).*(d/c_a)); 
+% H = H + pr*pt.*A.*G;
+% 
+% % reflections on second layer:
+% xref = (xt(1) + xr)'/2;
+% x = (xt(1) + xref)./2;
+% x_in = zeros(1,numElements);
+% for m = 1:numElements
+%     func = @(x) c_b/c_a*((x-xt(1))*((x-xt(1))^2 + z_in(1)^2)^(-1/2)) - (xref(m) - x)*((xref(m) -x)^2 + (z_in(2)-z_in(1))^2)^(-1/2);
+%     x_in(m) = fzero(func, x(n)); %Position where ingoing wave transits into the other material 
+% end
+% x_in = xt(1) - x_in;
+% 
+% dt1 = ((x_in).^2+(z_in(1))^2).^(1/2);
+% dt2 = ((xt + x_in - xref).^2 + (z_in(1) - z_in(2))^2).^(1/2)';
+% d1 = toeplitz(2 * dt1);
+% d2 = toeplitz(2 * dt2);
+% 
+% pt1 = sinc(pi*elementWidth*(toeplitz(abs(x_in))./d1)/lambda1); % Transmit directivity function
+% pt2 = sinc(pi*elementWidth*(toeplitz(abs(xt + x_in - xref))./d2)/lambda2);
+% pt = pt1 .* pt2;
+% pr = pt;
+% A = A./sqrt((d1+d2)^2); % Signal amplitude after propagation
+% 
+% % Complex spectrum for each transmitter-receiver pair
+% G = F.*exp(-1i*(2*pi*freq).*((2*d1)/c_a + (2*d2)/c_b)); 
+% H = H + pr*pt.*A.*G;
+
+% back to time domain
 S = H; % needed for input of PWI
-
-% Time-domain signal for each transmitter-receiver pair
-%H = permute(H,[3,1,2]); % because the function hilbert works columnwise
-% Hr = real(H); % because the function hilbert only works with real input
-% Hi = imag(H);
-% Hr = imag(hilbert(Hr));
-% Hi = imag(hilbert(Hi));
-% H = Hr + 1i* Hi;
-
 H = real(ifft(H,[],3));
-% H = imag(hilbert(real(H)));
-%H = reshape(envelope(reshape(real(H),1000,numElements^2)),1000,numElements,numElements);
-% fmc = abs(permute(H,[2,3,1]));

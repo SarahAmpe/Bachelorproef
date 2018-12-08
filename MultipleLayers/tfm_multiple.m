@@ -16,6 +16,9 @@ trans = length(arraySetup);
 intensity = zeros(length(gridz),length(gridx));
 x_in = intensity;
 x_out = x_in;
+timeIn = x_out;
+timeOut = timeIn;
+time = timeOut;
 
 for transmitter = 1:trans
     xt = arraySetup(transmitter);

@@ -123,10 +123,10 @@ saveas(gcf, file)
 
 %% PWI testing (single layer)
 % testparameters:
-t = linspace(-1e-4, 1e-4, 2^12); 
+t = linspace(-1e-4, 1e-4, 2^14); 
 c = 6.3e6;
-xref = 12;
-zref = 18;
+xref = -3;
+zref = 15;
 numElements = 64;
 elementWidth = 0.53;
 pitch = 0.63;
@@ -136,13 +136,18 @@ arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
 
 % FMC simulatie
 [~,S] = FMC(waveInfo,[c,xref,zref],elementInfo);
-% [~,S1] = FMC(waveInfo,[c,-2,15],elementInfo);
-% [~,S2] = FMC(waveInfo,[c,-1,15],elementInfo);
-% [~,S3] = FMC(waveInfo,[c, 0,15],elementInfo);
-% [~,S4] = FMC(waveInfo,[c, 1,15],elementInfo);
-% [~,S5] = FMC(waveInfo,[c, 2,15],elementInfo);
-% [~,S6] = FMC(waveInfo,[c, 3,15],elementInfo);
-% S = S + S1 + S2 + S3 + S4 + S5 + S6;
+[~,S1] = FMC(waveInfo,[c,-2,15],elementInfo);
+S = S + S1;
+[~,S1] = FMC(waveInfo,[c,-1,15],elementInfo);
+S = S + S1;
+[~,S1] = FMC(waveInfo,[c, 0,15],elementInfo);
+S = S + S1;
+[~,S1] = FMC(waveInfo,[c, 1,15],elementInfo);
+S = S + S1;
+[~,S1] = FMC(waveInfo,[c, 2,15],elementInfo);
+S = S + S1;
+[~,S1] = FMC(waveInfo,[c, 3,15],elementInfo);
+S = S + S1;
 
 % PWI simulatie
 angles = linspace(-pi/3,pi/3,120);

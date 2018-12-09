@@ -9,6 +9,6 @@ function signal = wave(A,f,t)
 
 wave = A*cos(2*pi*f*t);
 % wave = A*sinc(pi*t);
-signal = gausswin(length(wave),2000)'.*wave;
+signal = gausswin(length(wave),10000)'.*wave;
 
 end

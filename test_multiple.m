@@ -53,7 +53,7 @@ hold off
 
 %% PWI testing (multiple layers)
 % testparameters:
-t = linspace(-1e-4, 1e-4, 215); 
+t = linspace(-1e-4, 1e-4, 2^15); 
 c_a = 6.3e6; 
 c_b = 1.5e6;
 c = [c_a,c_b,c_a];
@@ -76,8 +76,8 @@ S = S + S1;
 S = S + S1;
 
 % PWI simulatie
-aantalx = 35;
-aantalz = 35;
+aantalx = 70;
+aantalz = 55;
 zmin = 4;
 zmax = 7;
 xmin = -(numElements-1)*pitch/2;
@@ -93,7 +93,7 @@ pwi = PWI(t,S,angles,pitch,c(1));
 figure
 I = PWI_image_multiple(pwi,t, x, z, z_in(1), c, arraySetup,angles);
 imagesc(x,z,I/max(max(I)))
-plotTitle = ['PWIsingle at position (', num2str(xref), ',' , num2str(zref), ')' ];
+plotTitle = ['PWImultiple at position (', num2str(xref), ',' , num2str(zref), ')' ];
 title(plotTitle)
 xlabel('x-coordinate in mm')
 ylabel('z-coordinate in mm')

@@ -15,16 +15,19 @@ gridz = gridz';
 trans = length(arraySetup);
 intensity = zeros(length(gridz),length(gridx));
 
-for m = 1:trans
-    xr = arraySetup(m);
-    time = sqrt((gridx-xr).^2 + (gridz).^2)/c;
-    for n = 1:length(angles)
-        time = time + gridz/cos(angles(n))/c ;
+for n = 1:length(angles)
+    for m = 1:trans
+        xr = arraySetup(m);
+        time = sqrt((gridx-xr).^2 + (gridz).^2)/c + gridz/cos(angles(n))/c;
         signal = permute(pwi(n,m, :), [3 1 2]);
         signal = envelope(signal(:,:));
         I = interp1(t,signal,time);
+        if isnan(I)
+            I
+        end
         intensity = intensity + I;
     end
 end
 % (gridx*sin(angles(n)) + gridz*cos(angles(n)))/c
 % sqrt(gridx.^2 + gridz.^2)/c
+% gridz/cos(angles(n))/c

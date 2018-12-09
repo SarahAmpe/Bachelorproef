@@ -135,7 +135,7 @@ elementInfo = [numElements,elementWidth,pitch];
 arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
 
 % FMC simulatie
-[~,S] = FMC(waveInfo,[c,-3,15],elementInfo);
+[~,S] = FMC(waveInfo,[c,xref,zref],elementInfo);
 % [~,S1] = FMC(waveInfo,[c,-2,15],elementInfo);
 % [~,S2] = FMC(waveInfo,[c,-1,15],elementInfo);
 % [~,S3] = FMC(waveInfo,[c, 0,15],elementInfo);

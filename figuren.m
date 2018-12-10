@@ -6,48 +6,48 @@ addpath('MultipleLayers')
 
 %% FIGUURPARAMETERS -- Defecten op meshgrid(xx,zz)
 % Lijnstuk
-xx = linspace(-5,5,10);
-zz = linspace(3,7,10);
+xx = linspace(-5,5,40);
+zz = linspace(3,7,40);
 
 % Pi-figuur
-% points = [
-%     -15,4;
-%      -7,3;
-%      0,3;
-%      7,3;
-%      15,2;
-%      -5,4.5;
-%      5,4.5;
-%      -5,6;
-%      5,6;
-%      -6,8;
-%      6,8];
-% xx = points(:,1);
-% zz = points(:,2);
-% 
+points = [
+    -15,4;
+     -7,3;
+     0,3;
+     7,3;
+     15,2;
+     -5,4.5;
+     5,4.5;
+     -5,6;
+     5,6;
+     -6,8;
+     6,8];
+xx = points(:,1);
+zz = points(:,2);
+
 % % Visje
-% points = [
-%      -17, 2;
-%      -17, 3;
-%      -17, 4;
-%      -17, 5;
-%      -13,4;
-%      -13,3;
-%      -7,3.5;
-%      -4,2.7;
-%      -4,4.2;
-%      0,2;
-%      0,5;
-%      5,1.5;
-%      5,5.5;
-%      10,2;
-%      10,5;
-%      13,4;
-%      13,3;
-%      17,3.5;
-%      12,4.8];
-% xx = points(:,1);
-% zz = points(:,2);
+points = [
+     -17, 2;
+     -17, 3;
+     -17, 4;
+     -17, 5;
+     -13,4;
+     -13,3;
+     -7,3.5;
+     -4,2.7;
+     -4,4.2;
+     0,2;
+     0,5;
+     5,1.5;
+     5,5.5;
+     10,2;
+     10,5;
+     13,4;
+     13,3;
+     17,3.5;
+     12,4.8];
+xx = points(:,1);
+zz = points(:,2);
 
 %% CONSTRUCTIE FIGUUR
 close all
@@ -76,6 +76,12 @@ xmax = (numElements-1)*pitch/2;
 arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
 z = linspace(zmin,zmax,aantalz);
 x = linspace(xmin,xmax,aantalx);
+
+% Defectfiguurtje
+imagesc(x,z,zeros(aantalx,aantalz))
+hold on
+plot(xx,zz,'kx')
+
 
 % Figuren maken
 I = planeScan(fmc,t,x,z,D,c,arraySetup);

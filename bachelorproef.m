@@ -6,10 +6,10 @@ addpath('MultipleLayers')
 
 %% FMC input (+ test wavefunctie)
 % Parameters
-t = linspace(-1.2e-5, 1.2e-5, 4096);
+t = linspace(-1.2e-5, 1.2e-5, 2^14);
 c = 7e6;
-xref = 0;
-zref = 3;
+xref = 12;
+zref = 2.3;
 numElements = 64;
 elementWidth = 0.53;
 pitch = 0.63;
@@ -22,25 +22,25 @@ elementInfo = [numElements,elementWidth,pitch];
 [fmc,~] = FMC(waveInfo,materialInfo,elementInfo);
 
 % Extra defecten toevoegen
-% fmc = fmc + FMC(waveInfo,[c,-17,2],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,-17,3],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,-17,4],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,-17,5],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,-13,4],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,-13,3],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,-7,3.5],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,-4,2.7],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,-4,4.2],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,0,2],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,0,5],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,5,1.5],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,5,5.5],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,10,2],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,10,5],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,13,4],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,13,3],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,17,3.5],elementInfo);
-% fmc = fmc + FMC(waveInfo,[c,12,4.8],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,-17,2],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,-17,3],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,-17,4],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,-17,5],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,-13,4],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,-13,3],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,-7,3.5],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,-4,2.7],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,-4,4.2],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,0,2],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,0,5],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,5,1.5],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,5,5.5],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,10,2],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,10,5],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,13,4],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,13,3],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,17,3.5],elementInfo);
+fmc = fmc + FMC(waveInfo,[c,12,4.8],elementInfo);
 
 % pi-figuur
 % fmc = fmc + FMC(waveInfo,[c,-15,4],elementInfo);
@@ -78,7 +78,7 @@ title(plotTitle)
 xlabel('x-coordinate in mm')
 ylabel('z-coordinate in mm')
 cb = colorbar;
-cb.Label.String = 'Intensity of the wave in the receiving transducers';
+cb.Label.String = 'Intensity of the wave in the receiving transducers (normalised)';
 file = string(['PlaneBScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)
 
@@ -91,7 +91,7 @@ title(plotTitle)
 xlabel('x-coordinate in mm')
 ylabel('z-coordinate in mm')
 cb = colorbar;
-cb.Label.String = 'Intensity of the wave in the receiving transducers';
+cb.Label.String = 'Intensity of the wave in the receiving transducers (normalised)';
 file = string(['SectorScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)
 
@@ -104,7 +104,7 @@ title(plotTitle)
 xlabel('x-coordinate in mm')
 ylabel('z-coordinate in mm')
 cb = colorbar;
-cb.Label.String = 'Intensity of the wave in the receiving transducers';
+cb.Label.String = 'Intensity of the wave in the receiving transducers (normalised)';
 file = string(['FocusedScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)
 
@@ -117,7 +117,7 @@ title(plotTitle)
 xlabel('x-coordinate in mm')
 ylabel('z-coordinate in mm')
 cb = colorbar;
-cb.Label.String = 'Intensity of the wave in the receiving transducers';
+cb.Label.String = 'Intensity of the wave in the receiving transducers (normalised)';
 file = string(['TFM_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)
 
@@ -171,6 +171,6 @@ title(plotTitle)
 xlabel('x-coordinate in mm')
 ylabel('z-coordinate in mm')
 cb = colorbar;
-cb.Label.String = 'Intensity of the wave in the receiving transducers';
+cb.Label.String = 'Intensity of the wave in the receiving transducers (normalised)';
 file = string(['PWIsingle_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)

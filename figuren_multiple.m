@@ -26,8 +26,8 @@ for i = 1:length(xx)
 end
 
 % Testparameters
-aantalx = 256; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 256;
+aantalx = 16; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 16;
 zmin = 0.05; % Testgrenzen voor z
 zmax = 6;
 

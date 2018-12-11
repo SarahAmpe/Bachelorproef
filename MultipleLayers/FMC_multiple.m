@@ -85,7 +85,7 @@ costi = (zref-z_in(1))./dr2;
 costt = z_in(1)./dr1;
 t_out = (R_b*costt)./(R_a*costi).*((2*R_a*costi)./(R_b*costt + R_a*costi)).^2;
 
-t = t_in + t_out;
+t = t_in .* t_out;
 
 % Complex spectrum for each transmitter-receiver pair
 G = F.*exp(-1i*(2*pi*freq).*(d1/c_a + d2/c_b)); 
@@ -108,30 +108,46 @@ r = ((R_b * costi - R_a * costt)./(R_b * costi + R_a * costt)).^2;
 G = F.*exp(-1i*(2*pi*freq).*(d/c_a)); 
 H = H + r.*pr.*pt.*A.*G;
 
-% % reflections on second layer:
-% xref = (xt(1) + xr)'/2;
-% x = (xt(1) + xref)./2;
-% x_in = zeros(1,numElements);
-% for m = 1:numElements
-%     func = @(x) c_b/c_a*((x-xt(1))*((x-xt(1))^2 + z_in(1)^2)^(-1/2)) - (xref(m) - x)*((xref(m) -x)^2 + (z_in(2)-z_in(1))^2)^(-1/2);
-%     x_in(m) = fzero(func, x(n)); %Position where ingoing wave transits into the other material 
-% end
-% x_in = xt(1) - x_in;
-% 
-% dt1 = ((x_in).^2+(z_in(1))^2).^(1/2);
-% dt2 = ((xt + x_in - xref).^2 + (z_in(1) - z_in(2))^2).^(1/2)';
-% d1 = toeplitz(2 * dt1);
-% d2 = toeplitz(2 * dt2);
-% 
-% pt1 = sinc(pi*elementWidth*(toeplitz(abs(x_in))./d1)/lambda1); % Transmit directivity function
-% pt2 = sinc(pi*elementWidth*(toeplitz(abs(xt + x_in - xref))./d2)/lambda2);
-% pt = pt1 .* pt2;
-% pr = pt;
-% A = A./sqrt((d1+d2)^2); % Signal amplitude after propagation
-% 
-% % Complex spectrum for each transmitter-receiver pair
-% G = F.*exp(-1i*(2*pi*freq).*((2*d1)/c_a + (2*d2)/c_b)); 
-% H = H + pr*pt.*A.*G;
+% reflections on second layer:
+xref = (xt(1) + xr)'/2;
+x = (xt(1) + xref)./2;
+x_in = zeros(1,numElements);
+for m = 1:numElements
+    func = @(x) c_b/c_a*((x-xt(1))*((x-xt(1))^2 + z_in(1)^2)^(-1/2)) - (xref(m) - x)*((xref(m) -x)^2 + (z_in(2)-z_in(1))^2)^(-1/2);
+    x_in(m) = fzero(func, x(n)); %Position where ingoing wave transits into the other material 
+end
+x_in = x_in - xt(1);
+x_in = toeplitz(x_in);
+
+dt1 = sqrt((x_in).^2+(z_in(1))^2);
+dt2 = sqrt((abs(xt-xref)-x_in).^2 + (z_in(1) - z_in(2))^2);
+d = dt1 + dt2;
+
+pt1 = sinc(pi*elementWidth*(x_in./dt1)/lambda1); % Transmit directivity function
+pt2 = sinc(pi*elementWidth*((abs(xt-xref)-x_in)./dt2)/lambda2);
+pt = pt1 .* pt2;
+pr = pt;
+A = A0./sqrt(d.*d); % Signal amplitude after propagation
+
+% Transmission coefficient (in)
+costi = z_in(1)./dt1;
+costt = (z_in(2)-z_in(1))./dt2;
+t_in = (R_a*costt)./(R_b*costi).*((2*R_b*costi)./(R_a*costt + R_b*costi)).^2;
+
+% Reflection coefficient
+costi = costt;
+costt = cos(asin(c_b/c_a*sin(acos(costi))));
+r = ((R_b * costi - R_a * costt)./(R_b * costi + R_a * costt)).^2;
+
+% Transmission coefficient (out)
+costi = (z_in(2)-z_in(1))./dt2;
+costt = z_in(1)./dt1;
+t_out = (R_b*costt)./(R_a*costi).*((2*R_a*costi)./(R_b*costt + R_a*costi)).^2;
+
+
+% Complex spectrum for each transmitter-receiver pair
+G = F.*exp(-1i*(2*pi*freq).*((2*dt1)/c_a + (2*dt2)/c_b)); 
+H = (t_in.*r.*t_out).*(pr*pt.*A.*G);
 
 % back to time domain
 S = H; % needed for input of PWI

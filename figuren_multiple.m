@@ -26,8 +26,8 @@ for i = 1:length(xx)
 end
 
 % Testparameters
-aantalx = 512; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 512;
+aantalx = 256; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 256;
 zmin = 0.05; % Testgrenzen voor z
 zmax = 6;
 
@@ -38,7 +38,7 @@ z = linspace(zmin,zmax,aantalz);
 x = linspace(xmin,xmax,aantalx);
 
 % Figuur maken
-I = tfm_multiple(fmc,t,x,z,z_in,c,arraySetup);
+I = tfm_multiple(fmc,t,x,z,z_in(1),c,arraySetup);
 plotTitle = ['TFM for multiple layers'];
 fileName = ['TFM_multiple.png'];
 intensityPlot(x,z,xx,zz,I,plotTitle,fileName)

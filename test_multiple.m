@@ -31,10 +31,10 @@ fmc = fmc + FMC_multiple(waveInfo,[-3,5.5, z_in,c],elementInfo);
 %% TFM testing (multiple layers)
 % testparameters:
 arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
-aantalx = 70; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 55;
-zmin = 4;
-zmax = 7;
+aantalx = 64; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 64;
+zmin = 0.05;
+zmax = 6;
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
 z = linspace(zmin,zmax,aantalz);
@@ -43,7 +43,7 @@ x = linspace(xmin,xmax,aantalx);
 % figuur
 figure
 I = tfm_multiple(fmc,t, x, z, z_in(1), [c_a,c_b], arraySetup);
-imagesc(x,z,I/max(max(I)))
+imagesc(x,z,I)
 colorbar
 hold on
 plot([xmin,xmax],[z_in(1),z_in(1)],'r','LineWidth',2)

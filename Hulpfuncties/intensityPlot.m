@@ -10,10 +10,10 @@ function intensityPlot(x,z,xx,zz,intensityMat,plotTitle,fileName)
     % fileName  = what name to give the plot
 
 figure
-imagesc(x,z,intensityMat/max(max(intensityMat)))
+imagesc(x,z,intensityMat)
 title(plotTitle)
 hold on
-%plot(xx,zz,'kx') % Defect locations
+% plot(xx,zz,'k.') % Defect locations
 xlabel('x-coordinate in mm')
 ylabel('z-coordinate in mm')
 cb = colorbar;

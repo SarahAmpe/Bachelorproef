@@ -6,7 +6,7 @@ addpath('MultipleLayers')
 
 %% FMC multiple input (+ test wavefunctie)
 t = linspace(-1e-5, 1e-5, 2^15); 
-plot(t,wave(1,5e6,t));
+% plot(t,wave(1,5e6,t));
 c_a = 6.3e6; % Longitudinaal in aluminium
 c_b = 1.5e6; % Sound velocity in water
 c = [c_a c_b c_a];
@@ -33,8 +33,8 @@ fmc = FMC_multiple(waveInfo,materialInfo,elementInfo);
 arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
 aantalx = 64; % Nauwkeurigheid (aantal punten dat je wilt plotten)
 aantalz = 64;
-zmin = 0.05;
-zmax = 6;
+zmin = 0;
+zmax = 7;
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
 z = linspace(zmin,zmax,aantalz);

@@ -117,7 +117,7 @@ for m = 1:numElements
     x_in(m) = fzero(func, x(n)); %Position where ingoing wave transits into the other material 
 end
 x_in = x_in - xt(1);
-x_in = toeplitz(x_in);
+x_in = toeplitz(x_in)';
 
 dt1 = sqrt((x_in).^2+(z_in(1))^2);
 dt2 = sqrt((abs(xt-xref)-x_in).^2 + (z_in(1) - z_in(2))^2);
@@ -144,10 +144,9 @@ costi = (z_in(2)-z_in(1))./dt2;
 costt = z_in(1)./dt1;
 t_out = (R_b*costt)./(R_a*costi).*((2*R_a*costi)./(R_b*costt + R_a*costi)).^2;
 
-
 % Complex spectrum for each transmitter-receiver pair
 G = F.*exp(-1i*(2*pi*freq).*((2*dt1)/c_a + (2*dt2)/c_b)); 
-H = (t_in.*r.*t_out).*(pr*pt.*A.*G);
+H = (t_in.*r.*t_out).*(pr.*pt.*A.*G);
 
 % back to time domain
 S = H; % needed for input of PWI

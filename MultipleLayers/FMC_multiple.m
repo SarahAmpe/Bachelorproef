@@ -147,7 +147,7 @@ t_out = (R_b*costt)./(R_a*costi).*((2*R_a*costi)./(R_b*costt + R_a*costi)).^2;
 
 % Complex spectrum for each transmitter-receiver pair
 G = F.*exp(-1i*(2*pi*freq).*((2*dt1)/c_a + (2*dt2)/c_b)); 
-H = (t_in.*r.*t_out).*(pr*pt.*A.*G);
+H = (t_in.*r.*t_out).*(pr.*pt.*A.*G);
 
 % back to time domain
 S = H; % needed for input of PWI

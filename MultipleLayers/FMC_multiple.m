@@ -75,9 +75,23 @@ pr2 = sinc(pi*elementWidth*(abs(x_out - xref)./dr2)/lambda2); % Receive directiv
 pr = pr1 .* pr2;
 A = A0./sqrt((dr1+dr2)*(dt1+dt2)); % Signal amplitude after propagation
 
+% Transmission coefficient (in)
+costi = z_in(1)./dt1;
+costt = (zref-z_in(1))./dt2;
+r_in = ((R_b * costi - R_a * costt)./(R_b * costi + R_a * costt)).^2;
+t_in = ((2*R_a*costi)./(R_a*costt + R_b*costi)).^2;
+
+% Transmisson coefficent (out)
+costi = (zref-z_in(1))./dr2;
+costt = z_in(1)./dr1;
+r_out = ((R_a * costi - R_b * costt)./(R_a * costi + R_b * costt)).^2;
+t_out = ((2*R_b*costi)./(R_b*costt + R_a*costi)).^2;
+
+t = t_in + t_out;
+
 % Complex spectrum for each transmitter-receiver pair
 G = F.*exp(-1i*(2*pi*freq).*(d1/c_a + d2/c_b)); 
-H = pr*pt.*A.*G;
+H = t.*pr*pt.*A.*G;
 
 % reflections on first layer:
 dt = sqrt(((xt-xr)/2).^2 + (z_in(1)).^2); 
@@ -86,13 +100,15 @@ d = dt + dr;
 pt = sinc(pi*elementWidth*(abs(xt -xr)/2./dt)/lambda1);
 pr = pt;
 A = A0./sqrt(dt.*dr);
+
+% Reflection coefficient
 costi = z_in(1)./dt;
-costt = cos(c_b/c_a*sin(acos(costi)));
-r = (R_b * costi - R_a * costt)./(R_b * costi + R_a * costt);
+costt = cos(asin(c_b/c_a*sin(acos(costi))));
+r = ((R_b * costi - R_a * costt)./(R_b * costi + R_a * costt)).^2;
 
 % Complex spectrum for each transmitter-receiver pair
 G = F.*exp(-1i*(2*pi*freq).*(d/c_a)); 
-H = r.*pr.*pt.*A.*G;
+H = H + r.*pr.*pt.*A.*G;
 
 % % reflections on second layer:
 % xref = (xt(1) + xr)'/2;

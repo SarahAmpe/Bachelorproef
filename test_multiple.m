@@ -21,12 +21,12 @@ materialInfo = [xref,zref, z_in,c];
 elementInfo = [numElements,elementWidth,pitch];
 
 fmc = FMC_multiple(waveInfo,materialInfo,elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[2,5.5, z_in,c],elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[1,5.5, z_in,c],elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[0,5.5, z_in,c],elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[-1,5.5, z_in,c],elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[-2,5.5, z_in,c],elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[-3,5.5, z_in,c],elementInfo);
+% fmc = fmc + FMC_multiple(waveInfo,[2,5.5, z_in,c],elementInfo);
+% fmc = fmc + FMC_multiple(waveInfo,[1,5.5, z_in,c],elementInfo);
+% fmc = fmc + FMC_multiple(waveInfo,[0,5.5, z_in,c],elementInfo);
+% fmc = fmc + FMC_multiple(waveInfo,[-1,5.5, z_in,c],elementInfo);
+% fmc = fmc + FMC_multiple(waveInfo,[-2,5.5, z_in,c],elementInfo);
+% fmc = fmc + FMC_multiple(waveInfo,[-3,5.5, z_in,c],elementInfo);
 
 %% TFM testing (multiple layers)
 % testparameters:

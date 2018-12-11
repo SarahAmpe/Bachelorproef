@@ -25,10 +25,10 @@ for i = 1:length(xx)
     fmc = fmc + FMC_multiple(waveInfo, [xx(i),zz(i),z_in,c], elementInfo);
 end
 
-% Testparameters
-aantalx = 512; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 512;
-zmin = 0.05; % Testgrenzen voor z
+%% Testparameters
+aantalx = 16; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 16;
+zmin = 5; % Testgrenzen voor z
 zmax = 6;
 
 xmin = -(numElements-1)*pitch/2;
@@ -38,7 +38,7 @@ z = linspace(zmin,zmax,aantalz);
 x = linspace(xmin,xmax,aantalx);
 
 % Figuur maken
-I = tfm_multiple(fmc,t,x,z,z_in,c,arraySetup);
+I = tfm_multiple(fmc,t,x,z,z_in(1),c,arraySetup);
 plotTitle = ['TFM for multiple layers'];
 fileName = ['TFM_multiple.png'];
 intensityPlot(x,z,xx,zz,I,plotTitle,fileName)

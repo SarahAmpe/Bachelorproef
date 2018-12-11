@@ -5,7 +5,7 @@ addpath('OrigineleFMCenPWI')
 addpath('MultipleLayers')
 
 %% FMC multiple input (+ test wavefunctie)
-t = linspace(-1e-5, 1e-5, 2^15); 
+t = linspace(-1e-5, 1e-5, 2^15);
 % plot(t,wave(1,5e6,t));
 c_a = 6.3e6; % Longitudinaal in aluminium
 c_b = 1.5e6; % Sound velocity in water
@@ -21,12 +21,12 @@ materialInfo = [xref,zref, z_in,c];
 elementInfo = [numElements,elementWidth,pitch];
 
 fmc = FMC_multiple(waveInfo,materialInfo,elementInfo);
-% fmc = fmc + FMC_multiple(waveInfo,[2,5.5, z_in,c],elementInfo);
-% fmc = fmc + FMC_multiple(waveInfo,[1,5.5, z_in,c],elementInfo);
-% fmc = fmc + FMC_multiple(waveInfo,[0,5.5, z_in,c],elementInfo);
-% fmc = fmc + FMC_multiple(waveInfo,[-1,5.5, z_in,c],elementInfo);
-% fmc = fmc + FMC_multiple(waveInfo,[-2,5.5, z_in,c],elementInfo);
-% fmc = fmc + FMC_multiple(waveInfo,[-3,5.5, z_in,c],elementInfo);
+fmc = fmc + FMC_multiple(waveInfo,[2,5.5, z_in,c],elementInfo);
+fmc = fmc + FMC_multiple(waveInfo,[1,5.5, z_in,c],elementInfo);
+fmc = fmc + FMC_multiple(waveInfo,[0,5.5, z_in,c],elementInfo);
+fmc = fmc + FMC_multiple(waveInfo,[-1,5.5, z_in,c],elementInfo);
+fmc = fmc + FMC_multiple(waveInfo,[-2,5.5, z_in,c],elementInfo);
+fmc = fmc + FMC_multiple(waveInfo,[-3,5.5, z_in,c],elementInfo);
 
 %% TFM testing (multiple layers)
 % testparameters:
@@ -53,8 +53,8 @@ hold off
 
 %% PWI testing (multiple layers)
 % testparameters:
-t = linspace(-1e-4, 1e-4, 2^15); 
-c_a = 6.3e6; 
+t = linspace(-1e-4, 1e-4, 2^15);
+c_a = 6.3e6;
 c_b = 1.5e6;
 c = [c_a,c_b,c_a];
 z_in = [5,6];
@@ -105,4 +105,3 @@ plot([xmin,xmax],[z_in(2),z_in(2)],'r','LineWidth',2)
 hold off
 file = string(['PWImultiple_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)
-

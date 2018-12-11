@@ -72,34 +72,34 @@ x = linspace(xmin,xmax,aantalx);
 %% planeScan testing
 figure
 I = planeScan(fmc,t,x,z,D,c,arraySetup);
-imagesc(x, z, I/max(max(I)))
-plotTitle = ['PlaneBScan at position (', num2str(xref), ',' , num2str(zref), ')' ];
+imagesc(x, z, I)
+plotTitle = ['Plane scan of multiple scatterers'];
 title(plotTitle)
 xlabel('x-coordinate in mm')
 ylabel('z-coordinate in mm')
 cb = colorbar;
-cb.Label.String = 'Intensity of the wave in the receiving transducers (normalised)';
-file = string(['PlaneBScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
+cb.Label.String = 'Intensity of the wave in the receiving transducers';
+fileName = string(['PlaneBScan_at_position_multiple_scatterers.png' ]);
 saveas(gcf, file)
 
 %% sectorScan testing
 figure
 I = sectorScan(fmc,t,x,z,c,arraySetup);
-imagesc(x,z,I/max(max(I)))
-plotTitle = ['SectorScan at position (', num2str(xref), ',' , num2str(zref), ')' ];
+imagesc(x,z,I)
+plotTitle = ['Sector scan at position (', num2str(xref), ',' , num2str(zref), ')' ];
 title(plotTitle)
 xlabel('x-coordinate in mm')
 ylabel('z-coordinate in mm')
 cb = colorbar;
-cb.Label.String = 'Intensity of the wave in the receiving transducers (normalised)';
+cb.Label.String = 'Intensity of the wave in the receiving transducers (normalised';
 file = string(['SectorScan_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)
 
 %% focusedScan testing
 figure
 I = focusedScan(fmc,t,x,z,D,c,arraySetup);
-imagesc(x,z,I/max(max(I)))
-plotTitle = ['FocusedScan at position (', num2str(xref), ',' , num2str(zref), ')' ];
+imagesc(x,z,I)
+plotTitle = ['Focused scan at position (', num2str(xref), ',' , num2str(zref), ')' ];
 title(plotTitle)
 xlabel('x-coordinate in mm')
 ylabel('z-coordinate in mm')
@@ -111,7 +111,7 @@ saveas(gcf, file)
 %% TFM testing
 figure
 I = tfm(fmc,t,x,z, c, arraySetup);
-imagesc(x,z,I/max(max(I)))
+imagesc(x,z,I)
 plotTitle = ['TFM at position (', num2str(xref), ',' , num2str(zref), ')' ];
 title(plotTitle)
 xlabel('x-coordinate in mm')

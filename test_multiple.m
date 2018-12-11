@@ -21,19 +21,19 @@ materialInfo = [xref,zref, z_in,c];
 elementInfo = [numElements,elementWidth,pitch];
 
 fmc = FMC_multiple(waveInfo,materialInfo,elementInfo);
-% fmc = fmc + FMC_multiple(waveInfo,[2,5.5, z_in,c],elementInfo);
-% fmc = fmc + FMC_multiple(waveInfo,[1,5.5, z_in,c],elementInfo);
-% fmc = fmc + FMC_multiple(waveInfo,[0,5.5, z_in,c],elementInfo);
-% fmc = fmc + FMC_multiple(waveInfo,[-1,5.5, z_in,c],elementInfo);
-% fmc = fmc + FMC_multiple(waveInfo,[-2,5.5, z_in,c],elementInfo);
-% fmc = fmc + FMC_multiple(waveInfo,[-3,5.5, z_in,c],elementInfo);
+fmc = fmc + FMC_multiple(waveInfo,[2,5.5, z_in,c],elementInfo);
+fmc = fmc + FMC_multiple(waveInfo,[1,5.5, z_in,c],elementInfo);
+fmc = fmc + FMC_multiple(waveInfo,[0,5.5, z_in,c],elementInfo);
+fmc = fmc + FMC_multiple(waveInfo,[-1,5.5, z_in,c],elementInfo);
+fmc = fmc + FMC_multiple(waveInfo,[-2,5.5, z_in,c],elementInfo);
+fmc = fmc + FMC_multiple(waveInfo,[-3,5.5, z_in,c],elementInfo);
 
 %% TFM testing (multiple layers)
 % testparameters:
 arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
-aantalx = 64; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 64;
-zmin = 0.05;
+aantalx = 256; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 256;
+zmin = 0;
 zmax = 6;
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;

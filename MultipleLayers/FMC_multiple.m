@@ -79,16 +79,15 @@ H = pr*pt.*A.*G;
 
 % % reflections on first layer:
 % dt = sqrt(((xt-xr)/2).^2 + (z_in(1))^.2); 
-% dr = dt';
+% dr = dt;
 % d = dt + dr;
 % pt = sinc(pi*elementWidth*(abs(xt -xr)/2./dt)/lambda1);
-% pr = sinc(pi*elementWidth*(abs(xt -xr)/2./dr)/lambda1);
-% pt = pt .* pt;
-% A = A./sqrt(dr*dt);
+% pr = pt;
+% A = A./sqrt(dt.*dr);
 % 
 % % Complex spectrum for each transmitter-receiver pair
 % G = F.*exp(-1i*(2*pi*freq).*(d/c_a)); 
-% H = H + pr*pt.*A.*G;
+% H = H + pr.*pt.*A.*G;
 % 
 % % reflections on second layer:
 % xref = (xt(1) + xr)'/2;

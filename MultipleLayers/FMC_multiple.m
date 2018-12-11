@@ -24,8 +24,8 @@ z_in = materialInfo(3:4); %Thickness of first material
 c = materialInfo(5:end);
 c_a = c(1);
 c_b = c(2);
-n_a = 3*10^(11)/c_b;
-n_b = 3*10^(11)/c_b;
+n_a = 3.43*10^(5)/c_a;
+n_b = c_a/c_b;
 
 numElements = elementInfo(1); 
 elementWidth = elementInfo(2);
@@ -86,10 +86,13 @@ d = dt + dr;
 pt = sinc(pi*elementWidth*(abs(xt -xr)/2./dt)/lambda1);
 pr = pt;
 A = A0./sqrt(dt.*dr);
+costi = z_in(1)./dt;
+costt = cos(c_b/c_a*sin(acos(costi)));
+r = (n_a * costi - n_b * costt)./(n_a * costi + n_b * costt);
 
 % Complex spectrum for each transmitter-receiver pair
 G = F.*exp(-1i*(2*pi*freq).*(d/c_a)); 
-H = pr.*pt.*A.*G;
+H = H + r.*pr.*pt.*A.*G;
 
 % % reflections on second layer:
 % xref = (xt(1) + xr)'/2;

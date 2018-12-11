@@ -25,10 +25,10 @@ for i = 1:length(xx)
     fmc = fmc + FMC_multiple(waveInfo, [xx(i),zz(i),z_in,c], elementInfo);
 end
 
-% Testparameters
+%% Testparameters
 aantalx = 16; % Nauwkeurigheid (aantal punten dat je wilt plotten)
 aantalz = 16;
-zmin = 0.05; % Testgrenzen voor z
+zmin = 5; % Testgrenzen voor z
 zmax = 6;
 
 xmin = -(numElements-1)*pitch/2;

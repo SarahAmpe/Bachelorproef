@@ -10,31 +10,26 @@ t = linspace(-1e-5, 1e-5, 2^15);
 c_a = 6.3e6; % Longitudinaal in aluminium
 c_b = 1.5e6; % Sound velocity in water
 c = [c_a c_b c_a];
-xref = 3;
-zref = 5.5;
 z_in = [5,6];
 numElements = 16;
 elementWidth = 0.53;
 pitch = 0.63;
 waveInfo = [1, 5e6,t];
-materialInfo = [xref,zref, z_in,c];
 elementInfo = [numElements,elementWidth,pitch];
 
-fmc = FMC_multiple(waveInfo,materialInfo,elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[2,5.5, z_in,c],elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[1,5.5, z_in,c],elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[0,5.5, z_in,c],elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[-1,5.5, z_in,c],elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[-2,5.5, z_in,c],elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[-3,5.5, z_in,c],elementInfo);
+xx = linspace(-4,4,5);
+fmc = zeros(numElements);
+for i = 1:length(xx)
+    fmc = fmc + FMC_multiple(waveInfo,[xx(i),5.5, z_in,c],elementInfo);
+end
 
 %% TFM testing (multiple layers)
 % testparameters:
 arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
 aantalx = 64; % Nauwkeurigheid (aantal punten dat je wilt plotten)
 aantalz = 64;
-zmin = 0;
-zmax = 7;
+zmin = 5;
+zmax = 6;
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
 z = linspace(zmin,zmax,aantalz);

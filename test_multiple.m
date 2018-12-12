@@ -17,7 +17,10 @@ pitch = 0.63;
 waveInfo = [1, 5e6,t];
 elementInfo = [numElements,elementWidth,pitch];
 
-xx = linspace(-4,4,5);
+xx = linspace(-4,4,5); % Voor 16 transducers:
+    % 1 mm: linspace(-3,3,6);
+    % 2 mm: linspace(-4,4,5);
+    % 3 mm: linspace(-3,3,3);
 fmc = zeros(numElements);
 for i = 1:length(xx)
     fmc = fmc + FMC_multiple(waveInfo,[xx(i),5.5, z_in,c],elementInfo);

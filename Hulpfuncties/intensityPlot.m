@@ -13,7 +13,7 @@ figure
 imagesc(x,z,intensityMat)
 title(plotTitle)
 hold on
-plot(xx,zz,'k.') % Defect locations
+%plot(xx,zz,'k.') % Defect locations
 xlabel('x-coordinate in mm')
 ylabel('z-coordinate in mm')
 cb = colorbar;

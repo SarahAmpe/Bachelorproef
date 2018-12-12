@@ -6,6 +6,7 @@ addpath('MultipleLayers')
 
 %% FIGUURPARAMETERS -- Defecten op meshgrid(xx,zz)
 xx = linspace(-3,3,7); %[-3,-2,-1,0,1,2,3]
+xx = [-3,0,3];
 zz = 5.5*ones(1,7);
 
 %% CONSTRUCTIE FIGUUR
@@ -26,8 +27,8 @@ for i = 1:length(xx)
 end
 
 %% Testparameters
-aantalx = 16; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 16;
+aantalx = 128; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 64;
 zmin = 5; % Testgrenzen voor z
 zmax = 6;
 

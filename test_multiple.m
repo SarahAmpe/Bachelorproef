@@ -5,35 +5,33 @@ addpath('OrigineleFMCenPWI')
 addpath('MultipleLayers')
 
 %% FMC multiple input (+ test wavefunctie)
-t = linspace(-1e-5, 1e-5, 2^15); 
-plot(t,wave(1,5e6,t));
+t = linspace(-1e-5, 1e-5, 2^15);
+% plot(t,wave(1,5e6,t));
 c_a = 6.3e6; % Longitudinaal in aluminium
 c_b = 1.5e6; % Sound velocity in water
 c = [c_a c_b c_a];
-xref = 3;
-zref = 5.5;
 z_in = [5,6];
 numElements = 16;
 elementWidth = 0.53;
 pitch = 0.63;
 waveInfo = [1, 5e6,t];
-materialInfo = [xref,zref, z_in,c];
 elementInfo = [numElements,elementWidth,pitch];
 
-fmc = FMC_multiple(waveInfo,materialInfo,elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[2,5.5, z_in,c],elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[1,5.5, z_in,c],elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[0,5.5, z_in,c],elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[-1,5.5, z_in,c],elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[-2,5.5, z_in,c],elementInfo);
-fmc = fmc + FMC_multiple(waveInfo,[-3,5.5, z_in,c],elementInfo);
+xx = linspace(-4,4,5); % Voor 16 transducers:
+    % 1 mm: linspace(-3,3,6);
+    % 2 mm: linspace(-4,4,5);
+    % 3 mm: linspace(-3,3,3);
+fmc = zeros(numElements);
+for i = 1:length(xx)
+    fmc = fmc + FMC_multiple(waveInfo,[xx(i),5.5, z_in,c],elementInfo);
+end
 
 %% TFM testing (multiple layers)
 % testparameters:
 arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
-aantalx = 256; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 256;
-zmin = 0;
+aantalx = 64; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 64;
+zmin = 5;
 zmax = 6;
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
@@ -53,8 +51,8 @@ hold off
 
 %% PWI testing (multiple layers)
 % testparameters:
-t = linspace(-1e-4, 1e-4, 2^15); 
-c_a = 6.3e6; 
+t = linspace(-1e-4, 1e-4, 2^15);
+c_a = 6.3e6;
 c_b = 1.5e6;
 c = [c_a,c_b,c_a];
 z_in = [5,6];
@@ -105,4 +103,3 @@ plot([xmin,xmax],[z_in(2),z_in(2)],'r','LineWidth',2)
 hold off
 file = string(['PWImultiple_at_position_(', num2str(xref), ',' , num2str(zref), ').png' ]);
 saveas(gcf, file)
-

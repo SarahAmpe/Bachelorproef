@@ -10,7 +10,6 @@ function [intensity] = sectorScan(fmc, t, x, z, c, arrSetup)
 % OUTPUT:
     % intensity = matrix with intensity for each (x,z) position
 
-fmc = permute(fmc, [3 1 2]);
 intensity = zeros(length(z), length(x));
 r = sqrt((x).^2 + z'.^2); % Matrix with propagation distances from array center
 st = x./r;
@@ -18,10 +17,14 @@ for transmit = 1:length(arrSetup)
     for receive = 1:length(arrSetup)
         xtx = arrSetup(transmit);
         xrx = arrSetup(receive);
-        time =        sqrt(r.^2 + xtx^2 - 2*xtx*r.*st);
-        time = time + sqrt(r.^2 + xrx^2 - 2*xrx*r.*st);
+        time = 2*r - st*xtx - st*xrx;
         time = time/c;
-        signal = envelope(fmc(:,transmit,receive));
+        signal = permute(fmc(transmit, receive, :), [3 1 2]);
+        signal = envelope(signal);
+        if transmit == 1 && receive == length(arrSetup)
+            time(20,12)
+            plot(t,signal);
+        end
         I = interp1(t,signal,time);
         intensity = intensity + I;
     end

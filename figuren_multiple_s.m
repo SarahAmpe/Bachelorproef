@@ -5,8 +5,7 @@ addpath('OrigineleFMCenPWI')
 addpath('MultipleLayers')
 
 %% FIGUURPARAMETERS -- Defecten op meshgrid(xx,zz)
-xx = linspace(-3,3,7); %[-3,-2,-1,0,1,2,3]
-xx = [-3,0,3];
+xx = linspace(-3,3,3); %[-3,-2,-1,0,1,2,3]
 zz = 5.5*ones(1,7);
 
 %% CONSTRUCTIE FIGUUR
@@ -16,7 +15,7 @@ c_a = 6.3e6; % Longitudinaal in aluminium
 c_b = 1.5e6; % Sound velocity in water
 c = [c_a c_b c_a];
 z_in = [5,6];
-numElements = 32;
+numElements = 16;
 elementWidth = 0.53;
 pitch = 0.63;
 waveInfo = [1, 5e6,t];
@@ -25,6 +24,7 @@ fmc = zeros(numElements);
 for i = 1:length(xx)
     fmc = fmc + FMC_multiple(waveInfo, [xx(i),zz(i),z_in,c], elementInfo);
 end
+arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
 
 %% Testparameters
 aantalx = 8; % Nauwkeurigheid (aantal punten dat je wilt plotten)

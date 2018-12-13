@@ -12,7 +12,7 @@ function [intensity] = sectorScan(fmc, t, x, z, c, arrSetup)
 
 intensity = zeros(length(z), length(x));
 r = sqrt((x).^2 + z'.^2); % Matrix with propagation distances from array center
-st = z./r;
+st = x./r;
 for transmit = 1:size(fmc,1)
     for receive = 1:size(fmc,2)
         xtx = arrSetup(transmit);

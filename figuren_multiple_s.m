@@ -16,7 +16,7 @@ c_a = 6.3e6; % Longitudinaal in aluminium
 c_b = 1.5e6; % Sound velocity in water
 c = [c_a c_b c_a];
 z_in = [5,6];
-numElements = 16;
+numElements = 32;
 elementWidth = 0.53;
 pitch = 0.63;
 waveInfo = [1, 5e6,t];
@@ -27,8 +27,8 @@ for i = 1:length(xx)
 end
 
 %% Testparameters
-aantalx = 128; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 64;
+aantalx = 8; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 8;
 zmin = 5; % Testgrenzen voor z
 zmax = 6;
 

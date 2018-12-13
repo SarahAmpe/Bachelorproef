@@ -5,7 +5,7 @@ addpath('OrigineleFMCenPWI')
 addpath('MultipleLayers')
 
 %% FIGUURPARAMETERS -- Defecten op meshgrid(xx,zz)
-xx = linspace(-3,3,7); %[-3,-2,-1,0,1,2,3]
+xx = linspace(-3,3,3); %[-3,-2,-1,0,1,2,3]
 zz = 5.5*ones(1,7);
 
 %% CONSTRUCTIE FIGUUR

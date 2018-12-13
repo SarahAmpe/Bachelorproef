@@ -4,49 +4,49 @@ addpath('Hulpfuncties')
 addpath('OrigineleFMCenPWI')
 addpath('MultipleLayers')
 
-% %% FMC multiple input (+ test wavefunctie)
-% t = linspace(-1e-5, 1e-5, 2^15);
-% % plot(t,wave(1,5e6,t));
-% c_a = 6.3e6; % Longitudinaal in aluminium
-% c_b = 1.5e6; % Sound velocity in water
-% c = [c_a c_b c_a];
-% z_in = [5,6];
-% numElements = 32;
-% elementWidth = 0.53;
-% pitch = 0.63;
-% waveInfo = [1, 5e6,t];
-% elementInfo = [numElements,elementWidth,pitch];
-% 
-% xx = linspace(-9,9,7); % Voor 16 transducers:
-%     % 1 mm: linspace(-3,3,6);
-%     % 2 mm: linspace(-4,4,5);
-%     % 3 mm: linspace(-3,3,3);
-% fmc = zeros(numElements);
-% for i = 1:length(xx)
-%     fmc = fmc + FMC_multiple(waveInfo,[xx(i),5.5, z_in,c],elementInfo);
-% end
-% 
-% %% TFM testing (multiple layers)
-% % testparameters:
-% arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
-% aantalx = 64; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-% aantalz = 64;
-% zmin = 5;
-% zmax = 6;
-% xmin = -(numElements-1)*pitch/2;
-% xmax = (numElements-1)*pitch/2;
-% z = linspace(zmin,zmax,aantalz);
-% x = linspace(xmin,xmax,aantalx);
-% 
-% % figuur
-% figure
-% I = tfm_multiple(fmc,t, x, z, z_in(1), [c_a,c_b], arraySetup);
-% imagesc(x,z,I)
-% colorbar
-% hold on
-% plot([xmin,xmax],[z_in(1),z_in(1)],'r','LineWidth',2)
-% plot([xmin,xmax],[z_in(2),z_in(2)],'r','LineWidth',2)
-% hold off
+%% FMC multiple input (+ test wavefunctie)
+t = linspace(-1e-5, 1e-5, 2^15);
+% plot(t,wave(1,5e6,t));
+c_a = 6.3e6; % Longitudinaal in aluminium
+c_b = 1.5e6; % Sound velocity in water
+c = [c_a c_b c_a];
+z_in = [5,6];
+numElements = 32;
+elementWidth = 0.53;
+pitch = 0.63;
+waveInfo = [1, 5e6,t];
+elementInfo = [numElements,elementWidth,pitch];
+
+xx = linspace(-9,9,7); % Voor 16 transducers:
+    % 1 mm: linspace(-3,3,6);
+    % 2 mm: linspace(-4,4,5);
+    % 3 mm: linspace(-3,3,3);
+fmc = zeros(numElements);
+for i = 1:length(xx)
+    fmc = fmc + FMC_multiple(waveInfo,[xx(i),5.5, z_in,c],elementInfo);
+end
+
+%% TFM testing (multiple layers)
+% testparameters:
+arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
+aantalx = 64; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 64;
+zmin = 5;
+zmax = 6;
+xmin = -(numElements-1)*pitch/2;
+xmax = (numElements-1)*pitch/2;
+z = linspace(zmin,zmax,aantalz);
+x = linspace(xmin,xmax,aantalx);
+
+% figuur
+figure
+I = tfm_multiple(fmc,t, x, z, z_in(1), [c_a,c_b], arraySetup);
+imagesc(x,z,I)
+colorbar
+hold on
+plot([xmin,xmax],[z_in(1),z_in(1)],'r','LineWidth',2)
+plot([xmin,xmax],[z_in(2),z_in(2)],'r','LineWidth',2)
+hold off
 
 
 %% PWI testing (multiple layers)

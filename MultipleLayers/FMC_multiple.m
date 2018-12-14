@@ -85,13 +85,15 @@ costi = (zref-z_in(1))./dr2;
 costt = z_in(1)./dr1;
 t_out = (R_b*costt)./(R_a*costi).*((2*R_a*costi)./(R_b*costt + R_a*costi)).^2;
 
+t = 1; % NO REFLECTIONS: COMMENT NEXT LINE
 t = t_in .* t_out;
 
 % Complex spectrum for each transmitter-receiver pair
 G = F.*exp(-1i*(2*pi*freq).*(d1/c_a + d2/c_b)); 
 H = t.*(pr*pt.*A.*G);
 
-% reflections on first layer:
+
+% REFLECTIONS ON FIRST LAYER
 dt = sqrt(((xt-xr)/2).^2 + (z_in(1)).^2); 
 dr = dt;
 d = dt + dr;
@@ -108,7 +110,8 @@ r = ((R_b * costi - R_a * costt)./(R_b * costi + R_a * costt)).^2;
 G = F.*exp(-1i*(2*pi*freq).*(d/c_a)); 
 H = H + r.*pr.*pt.*A.*G;
 
-% reflections on second layer:
+
+% REFLECTIONS ON SECOND LAYER
 xref = (xt(1) + xr)'/2;
 x = (xt(1) + xref)./2;
 x_in = zeros(1,numElements);
@@ -151,3 +154,4 @@ H = H + (t_in.*r.*t_out).*(pr.*pt.*A.*G);
 % back to time domain
 S = H; % needed for input of PWI
 H = real(ifft(H,[],3));
+end

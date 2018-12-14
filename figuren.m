@@ -54,7 +54,7 @@ close all
 % Opbouw full matrix
 t = linspace(-1.2e-5, 1.2e-5, 4096);
 c = 7e6;
-numElements = 64;
+numElements = 128;
 elementWidth = 0.53;
 pitch = 0.63;
 waveInfo = [1,5e6,t];
@@ -66,8 +66,8 @@ end
 
 % Testparameters
 D = 5*pitch; % Aperture width
-aantalx = 64; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 64;
+aantalx = 32; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 32;
 zmin = 0.01; % Testgrenzen voor z
 zmax = 10;
 
@@ -84,11 +84,11 @@ plot(xx,zz,'kx')
 
 
 % Figuren maken
-I = planeScan(fmc,t,x,z,D,c,arraySetup);
-%plotTitle = ['Plane scan at position (', num2str(xx(1)), ',' , num2str(zz(1)), ')' ];
-plotTitle = ['Plane scan of multiple scatterers'];
-fileName = string(['PlaneBScan_at_position_multiple_scatterers2.png' ]);
-intensityPlot(x,z,xx,zz,I,plotTitle,fileName);
+% I = planeScan(fmc,t,x,z,D,c,arraySetup);
+% %plotTitle = ['Plane scan at position (', num2str(xx(1)), ',' , num2str(zz(1)), ')' ];
+% plotTitle = ['Plane scan of multiple scatterers'];
+% fileName = string(['PlaneBScan_at_position_multiple_scatterers2.png' ]);
+% intensityPlot(x,z,xx,zz,I,plotTitle,fileName);
 
 I = sectorScan(fmc,t,x,z,c,arraySetup);
 %plotTitle = ['Sector scan at position (', num2str(xx(1)), ',' , num2str(zz(1)), ')' ];
@@ -96,17 +96,17 @@ plotTitle = ['Sector scan of multiple scatterers'];
 fileName = string(['SectorScan_at_position_multiple_scatterers2.png' ]);
 intensityPlot(x,z,xx,zz,I,plotTitle,fileName);
 
-I = focusedScan(fmc,t,x,z,D,c,arraySetup);
-%plotTitle = ['Focused scan at position (', num2str(xx(1)), ',' , num2str(zz(1)), ')' ];
-plotTitle = ['Focused scan of multiple scatterers'];
-fileName = string(['FocusedScan_at_position_multiple_scatterers2.png' ]);
-intensityPlot(x,z,xx,zz,I,plotTitle,fileName);
-
-I = tfm(fmc,t,x,z, c, arraySetup);
-%plotTitle = ['TFM at position (', num2str(xx(1)), ',' , num2str(zz(1)), ')' ];
-plotTitle = ['TFM of multiple scatterers']; 
-fileName = string(['TFM_at_position_multiple_scatterers2.png' ]);
-intensityPlot(x,z,xx,zz,I,plotTitle,fileName);
+% I = focusedScan(fmc,t,x,z,D,c,arraySetup);
+% %plotTitle = ['Focused scan at position (', num2str(xx(1)), ',' , num2str(zz(1)), ')' ];
+% plotTitle = ['Focused scan of multiple scatterers'];
+% fileName = string(['FocusedScan_at_position_multiple_scatterers2.png' ]);
+% intensityPlot(x,z,xx,zz,I,plotTitle,fileName);
+% 
+% I = tfm(fmc,t,x,z, c, arraySetup);
+% %plotTitle = ['TFM at position (', num2str(xx(1)), ',' , num2str(zz(1)), ')' ];
+% plotTitle = ['TFM of multiple scatterers']; 
+% fileName = string(['TFM_at_position_multiple_scatterers2.png' ]);
+% intensityPlot(x,z,xx,zz,I,plotTitle,fileName);
 
 %% PWI testing (single layer)
 % testparameters:

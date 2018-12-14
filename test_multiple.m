@@ -82,9 +82,9 @@ c_a = 6.3e6;
 c_b = 1.5e6;
 c = [c_a,c_b,c_a];
 z_in = [5,6];
-xref = 0;
+xref = [-5,0,5];
 zref = 5.5;
-numElements = 16;
+numElements = 32;
 elementWidth = 0.53;
 pitch = 0.63;
 waveInfo = [1, 5e6,t];
@@ -92,31 +92,33 @@ materialInfo = [xref,zref,z_in,c];
 elementInfo = [numElements,elementWidth,pitch,c];
 arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
 
-% FMC simulatie
-[~,S] = FMC_multiple(waveInfo,materialInfo,elementInfo);
-[~,S1] = FMC_multiple(waveInfo,[-3,zref,z_in,c],elementInfo);
-S = S + S1;
-[~,S1] = FMC_multiple(waveInfo,[ 3,zref,z_in,c],elementInfo);
-S = S + S1;
-
 % PWI simulatie
-aantalx = 70;
-aantalz = 55;
-zmin = 4;
-zmax = 7;
+aantalx = 64;
+aantalz = 64;
+zmin = 5;
+zmax = 6;
 xmin = -(numElements-1)*pitch/2;
 xmax = (numElements-1)*pitch/2;
 z = linspace(zmin,zmax,aantalz);
-x = linspace(xmin,xmax,aantalx);
+x = linspace(xmin,xmax,aantalz);
 thetamax = atan(zmin/arraySetup(end));
 angles = linspace(-thetamax,thetamax,60);
+
+% FMC simulatie
+[~,S] = FMC_multiple(waveInfo,materialInfo,elementInfo);
+for el = 1:length(xref)
+    [~,S1] = FMC_multiple(waveInfo,[xref(el),zref,z_in,c],elementInfo);
+    S = S + S1;
+end
+
+
 
 pwi = PWI(t,S,angles,pitch,c(1));
 
 % figuur
 figure
 I = PWI_image_multiple(pwi,t, x, z, z_in(1), c, arraySetup,angles);
-imagesc(x,z,I/max(max(I)))
+imagesc(x,z,I)
 plotTitle = ['PWImultiple at position (', num2str(xref), ',' , num2str(zref), ')' ];
 title(plotTitle)
 xlabel('x-coordinate in mm')

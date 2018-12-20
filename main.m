@@ -87,15 +87,15 @@ S = fmc;
 for i = 1:length(xx)
     [fmcTemp,STemp] =  FMC_multiple(waveInfo, [xx(i),zz(i),z_in,c], elementInfo);
     fmc = fmc + fmcTemp;
-    STemp = S + STemp;
+    S = S + STemp;
 end
 clear('fmcTemp','STemp') % Memory cleaning
 angles = linspace(-pi/3,pi/3,120);
 pwi = PWI(t,S,angles,pitch,c(1));
 
 % Inputparameters post-processing
-aantalx = 8; % Nauwkeurigheid (aantal punten dat je wilt plotten)
-aantalz = 8;
+aantalx = 64; % Nauwkeurigheid (aantal punten dat je wilt plotten)
+aantalz = 64;
 zmin = 5; % Testgrenzen voor z
 zmax = 6;
 

@@ -90,6 +90,7 @@ for i = 1:length(xx)
     STemp = S + STemp;
 end
 clear('fmcTemp','STemp') % Memory cleaning
+angles = linspace(-pi/3,pi/3,120);
 pwi = PWI(t,S,angles,pitch,c(1));
 
 % Inputparameters post-processing
@@ -113,6 +114,7 @@ I = tfm_multiple(fmc,t,x,z,z_in(1),c,arraySetup);
 imagesc(x,z,I)
 title("TFM multiple layers")
 
-% figure
-% I = PWI_image_multiple(pwi,t,x,z,z_in(1),c,arraySetup,angles);
-% imagesc(x,z,I)
+figure
+I = PWI_image_multiple(pwi,t,x,z,z_in(1),c,arraySetup,angles);
+imagesc(x,z,I)
+title("PWI multiple layers")

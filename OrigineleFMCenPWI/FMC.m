@@ -49,13 +49,7 @@ H = pr*pt.*A.*G;
 S = H; % needed for input of PWI
 
 % Time-domain signal for each transmitter-receiver pair
-%H = permute(H,[3,1,2]); % because the function hilbert works columnwise
-% Hr = real(H); % because the function hilbert only works with real input
-% Hi = imag(H);
-% Hr = imag(hilbert(Hr));
-% Hi = imag(hilbert(Hi));
-% H = Hr + 1i* Hi;
-
 H = real(ifft(H,[],3));
-%H = reshape(envelope(reshape(real(H),1000,numElements^2)),1000,numElements,numElements);
+
+end
 

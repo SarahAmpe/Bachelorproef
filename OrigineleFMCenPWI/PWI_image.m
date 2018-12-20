@@ -26,6 +26,5 @@ for n = 1:length(angles)
         intensity = intensity + I;
     end
 end
-% (gridx*sin(angles(n)) + gridz*cos(angles(n)))/c
-% sqrt(gridx.^2 + gridz.^2)/c
-% gridz/cos(angles(n))/c
+
+end

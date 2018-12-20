@@ -1,5 +1,6 @@
 function [H,S] = FMC_multiple(waveInfo,materialInfo,elementInfo)
-% FMC_MULTIPLE Simulates the full matrix capture of a phased array for a multiple-layered material with a given scatterpoint.
+% FMC_MULTIPLE Simulates the full matrix capture of a phased array for a 
+% multiple-layered material with a given scatterpoint.
 % INPUT:
     % waveInfo     = Amplitude, frequency and timesequence for the simulated signal (cosine wave)
     % materialInfo = x,y-Coordinates ([xref,yref]) of the defect (pointscatterer) and 
@@ -16,7 +17,6 @@ function [H,S] = FMC_multiple(waveInfo,materialInfo,elementInfo)
 A0 = waveInfo(1);
 f = waveInfo(2);
 t = waveInfo(3:end);
-
 
 xref = materialInfo(1); % Defect
 zref = materialInfo(2);
@@ -40,24 +40,24 @@ N = length(t);
 F = permute(fft(signal,N),[1,3,2]); 
 freq = permute((0:N-1)/N/(t(2)-t(1)),[1,3,2]);
 
-
 % Calculating propagation distance, directivity functions and signal amplitude
 xt = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);  % x=0 is the centre of the phased array
 xr = xt';
 
-% reflections on defect
+
+% REFLECTIONS ON DEFECT
 x = (xt + xref)./2;
 x_in = zeros(1,numElements);
 for n = 1:numElements
     func = @(x) c_b/c_a*((x-xt(n))*((x-xt(n))^2 + z_in(1)^2)^(-1/2)) - (xref - x)*((xref -x)^2 + (zref-z_in(1))^2)^(-1/2);
-    x_in(n) = fzero(func, x(n)); %Position where ingoing wave transits into the other material 
+    x_in(n) = fzero(func, x(n)); % Position where ingoing wave transits into the other material 
 end
 
 x = (xref + xr)./2;
 x_out = zeros(numElements,1);
 for n = 1:numElements
     func = @(x) c_a/c_b*((x-xref)*((x-xref)^2 + (zref-z_in(1))^2)^(-1/2)) - (xr(n)-x)*((xr(n)-x)^2 + z_in(1)^2)^(-1/2);
-    x_out(n) = fzero(func, x(n)); %Position where outgoing wave transits into the other material 
+    x_out(n) = fzero(func, x(n)); % Position where outgoing wave transits into the other material 
 end
 
 dt1 = ((xt-x_in).^2+(z_in(1))^2).^(1/2);
@@ -85,7 +85,7 @@ costi = (zref-z_in(1))./dr2;
 costt = z_in(1)./dr1;
 t_out = (R_b*costt)./(R_a*costi).*((2*R_a*costi)./(R_b*costt + R_a*costi)).^2;
 
-t = 1; % NO REFLECTIONS: COMMENT NEXT LINE
+t = 1; % No reflections: comment next line
 t = t_in .* t_out;
 
 % Complex spectrum for each transmitter-receiver pair
@@ -117,7 +117,7 @@ x = (xt(1) + xref)./2;
 x_in = zeros(1,numElements);
 for m = 1:numElements
     func = @(x) c_b/c_a*((x-xt(1))*((x-xt(1))^2 + z_in(1)^2)^(-1/2)) - (xref(m) - x)*((xref(m) -x)^2 + (z_in(2)-z_in(1))^2)^(-1/2);
-    x_in(m) = fzero(func, x(n)); %Position where ingoing wave transits into the other material 
+    x_in(m) = fzero(func, x(n)); % Position where ingoing wave transits into the other material 
 end
 x_in = x_in - xt(1);
 x_in = toeplitz(x_in)';
@@ -151,7 +151,7 @@ t_out = (R_b*costt)./(R_a*costi).*((2*R_a*costi)./(R_b*costt + R_a*costi)).^2;
 G = F.*exp(-1i*(2*pi*freq).*((2*dt1)/c_a + (2*dt2)/c_b)); 
 H = H + (t_in.*r.*t_out).*(pr.*pt.*A.*G);
 
-% back to time domain
-S = H; % needed for input of PWI
+% Back to time domain
+S = H; % Needed for input of PWI
 H = real(ifft(H,[],3));
 end

@@ -9,9 +9,9 @@ function [lowerTime,upperTime] = time2(t,time)
     % upperTime = lowest value of t which is bigger than time
     
 if any(t <= time)
- lowerTime = find(t <= time, 1, 'last');
+    lowerTime = find(t <= time, 1, 'last');
 else
- lowerTime = 1;
+    lowerTime = 1;
 end
 upperTime = min(lowerTime+1, length(t));
 

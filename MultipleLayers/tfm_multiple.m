@@ -1,4 +1,4 @@
-function [intensity] = tfm_multiple(fullMat,t,gridx,gridz,z_in, c, arraySetup)
+function [intensity] = tfm_multiple(fullMat,t,gridx,gridz,z_in,c,arraySetup)
 % TFM_MULTIPLE Calculates intensity of the Total Focusing Method at all (x,z) pairs for a multiple-layered material
 % INPUT:
     % fullMat    = full matrix of time domain signals

@@ -1,4 +1,4 @@
-function intensity = PWI_image_multiple(pwi,t, gridx, gridz, z_in, c, arraySetup, angles)
+function intensity = PWI_image_multiple(pwi,t,gridx,gridz,z_in,c,arraySetup,angles)
 % PWI_IMAGE Calculates intensity of the PWI-technique at all (x,z) pairs for a multiple-layered material
 % INPUT:
     % pwi        = pwi matrix of time domain signals

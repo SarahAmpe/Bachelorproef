@@ -5,7 +5,7 @@ function signal = wave(A,f,t)
     % f = frequency of the signal
     % t = time-sequence for the signal
 % OUTPUT:
-    % signal = gaussian windowed cosinus signal.
+    % signal = gaussian windowed cosine signal.
 
 wave = A*cos(2*pi*f*t);
 % wave = A*sinc(pi*t);

@@ -5,6 +5,7 @@ function [intensity] = planeScan_multiple(fmc, t, x, z, z_in, D, c, arrSetup)
     % t        = time sequence of fullMat
     % x        = array with positions of the points of interest along the array axis
     % z        = array with positions of the points of interest normal to the array surface
+    % z_in     = position of the first interface
     % D        = aperture width
     % c        = sound speed in the medium
     % arrSetup = vector of x coordinates of the array elements

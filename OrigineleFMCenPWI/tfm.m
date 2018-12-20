@@ -1,5 +1,5 @@
 function [intensity] = tfm(fullMat,t,x,z, c, arraySetup)
-% TFM Calculates intensity of the Total Focusing Method at (x,z)
+% TFM Calculates intensity of the Total Focusing Method
 % INPUT:
     % fullMat    = full matrix of time domain signals
     % t          = time sequence of fullMat

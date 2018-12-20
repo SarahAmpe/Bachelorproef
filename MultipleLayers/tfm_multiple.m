@@ -5,6 +5,7 @@ function [intensity] = tfm_multiple(fullMat,t,gridx,gridz,z_in,c,arraySetup)
     % t          = time sequence of fullMat
     % gridx      = positions of the points of interest along the array axis
     % gridz      = positions of the points of interest normal to the array surface
+    % z_in       = position of the first interface
     % c          = sound speed in the media
     % arraySetup = vector of x coordinates of the array elements
 % OUTPUT:

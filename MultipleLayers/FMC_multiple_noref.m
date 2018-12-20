@@ -1,5 +1,6 @@
 function [H,S] = FMC_multiple_noref(waveInfo,materialInfo,elementInfo)
-% FMC_MULTIPLE_NOREF Simulates the full matrix capture of a phased array for a multiple-layered material with a given scatterpoint.
+% FMC_MULTIPLE_NOREF Simulates the full matrix capture of a phased array 
+% for a multiple-layered material with a given scatterpoint (without reflections).
 % INPUT:
     % waveInfo     = Amplitude, frequency and timesequence for the simulated signal (cosine wave)
     % materialInfo = x,y-Coordinates ([xref,yref]) of the defect (pointscatterer) and 
@@ -9,7 +10,8 @@ function [H,S] = FMC_multiple_noref(waveInfo,materialInfo,elementInfo)
 % OUTPUT:
     % S   = 3D-matrix with the resulting spectrum for each transmitter-receiver pair.
     %       (dimensions: transmitter, receiver, frequency)
-    % fmc = 3D-matrix with the resulting time-domain signal for each transmitter-receiver pair obtained with the complex Hilbert transform.
+    % fmc = 3D-matrix with the resulting time-domain signal for each
+    % transmitter-receiver pair.
     %       (dimensions: transmitter, receiver, time)
 
 % Parameters

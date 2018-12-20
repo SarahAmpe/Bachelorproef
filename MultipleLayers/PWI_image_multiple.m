@@ -5,6 +5,7 @@ function intensity = PWI_image_multiple(pwi,t,gridx,gridz,z_in,c,arraySetup,angl
     % t          = time sequence of fullMat
     % gridx      = positions of the points of interest along the array axis
     % gridz      = positions of the points of interest normal to the array surface
+    % z_in       = position of the first interface
     % c          = sound speed in the media
     % arraySetup = vector of x coordinates of the array elements
     % angles     = vector with all different angels used for transmission
@@ -46,5 +47,3 @@ for m = 1:trans
         intensity = intensity + I;
     end
 end
-% (gridx*sin(angles(n)) + gridz*cos(angles(n)))/c
-% sqrt(gridx.^2 + gridz.^2)/c

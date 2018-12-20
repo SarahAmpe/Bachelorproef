@@ -1,6 +1,6 @@
 function [H,S] = FMC_multiple(waveInfo,materialInfo,elementInfo)
 % FMC_MULTIPLE Simulates the full matrix capture of a phased array for a 
-% multiple-layered material with a given scatterpoint.
+% multiple-layered material with a given scatterpoint (with reflections).
 % INPUT:
     % waveInfo     = Amplitude, frequency and timesequence for the simulated signal (cosine wave)
     % materialInfo = x,y-Coordinates ([xref,yref]) of the defect (pointscatterer) and 
@@ -85,7 +85,6 @@ costi = (zref-z_in(1))./dr2;
 costt = z_in(1)./dr1;
 t_out = (R_b*costt)./(R_a*costi).*((2*R_a*costi)./(R_b*costt + R_a*costi)).^2;
 
-t = 1; % No reflections: comment next line
 t = t_in .* t_out;
 
 % Complex spectrum for each transmitter-receiver pair

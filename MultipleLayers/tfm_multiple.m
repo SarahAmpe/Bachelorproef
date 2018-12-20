@@ -21,6 +21,9 @@ timeIn = x_out;
 timeOut = timeIn;
 time = timeOut;
 
+% Note: can be made much more efficient by using the fact that the
+% time-of-flight from a transducer to the defect is the same if it used as 
+% transmitter as when it is used as a receiver
 for transmitter = 1:trans
     xt = arraySetup(transmitter);
     func_in = @(x,x_p,z_p) c_b/c_a*((x-xt)*((x-xt)^2 + z_in^2)^(-1/2)) - (x_p - x)*((x_p -x)^2 + (z_p-z_in)^2)^(-1/2);
@@ -47,4 +50,6 @@ for transmitter = 1:trans
         I = interp1(t,signal,time); % Linearly interpolating time
         intensity = intensity + I;
     end
+end
+
 end

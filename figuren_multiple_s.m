@@ -24,7 +24,6 @@ fmc = zeros(numElements);
 for i = 1:length(xx)
     fmc = fmc + FMC_multiple(waveInfo, [xx(i),zz(i),z_in,c], elementInfo);
 end
-arraySetup = (-(numElements-1)*pitch/2:pitch:(numElements-1)*pitch/2);
 
 %% Testparameters
 aantalx = 8; % Nauwkeurigheid (aantal punten dat je wilt plotten)

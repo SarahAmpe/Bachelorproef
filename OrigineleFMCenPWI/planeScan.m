@@ -17,7 +17,7 @@ intensity = zeros(length(z), length(x));
 for m = 1:length(x)
     arrElems = abs(arrSetup - x(m)) <= D/2; % Array elements that matter
     signal = permute(fmc(arrElems,arrElems,:),[3,1,2]);
-    signal = sum(envelope(signal(:,:)),2); % Take the Hilbert transform and sum for each transmitter (?)
+    signal = sum(envelope(signal(:,:)),2); % Take the Hilbert transform and sum for each transmitter
     intensity(:,m) = interp1(t,signal,time);
 end
 

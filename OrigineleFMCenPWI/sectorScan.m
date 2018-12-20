@@ -1,5 +1,5 @@
 function [intensity] = sectorScan(fmc, t, x, z, c, arrSetup)
-% SECTORSCAN Calculates intensity of the plane B-scan image for each point in a grid
+% SECTORSCAN Calculates intensity of the sector scan image for each point in a grid
 % INPUT: 
     % fmc      = full matrix of time domain signals
     % t        = time sequence of fullMat
@@ -21,10 +21,6 @@ for transmit = 1:size(fmc,1)
         time = time./c;
         signal = permute(fmc(transmit, receive, :), [3 1 2]);
         signal = envelope(signal);
-%         if transmit == 1 && receive == length(arrSetup)
-%             time(20,12)
-%             plot(t,signal);
-%         end
         I = interp1(t,signal,time);
         intensity = intensity + I;
     end

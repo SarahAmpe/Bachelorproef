@@ -7,7 +7,7 @@ function [H,S] = FMC(waveInfo,materialInfo,elementInfo)
 % OUTPUT:
     % S   = 3D-matrix with the resulting spectrum for each transmitter-receiver pair.
     %       (dimensions: transmitter, receiver, frequency)
-    % fmc = 3D-matrix with the resulting time-domain signal for each transmitter-receiver pair obtained with the complex Hilbert transform.
+    % H   = 3D-matrix with the resulting time-domain signal for each transmitter-receiver pair (full matrix).
     %       (dimensions: transmitter, receiver, time)
 
 % Parameters

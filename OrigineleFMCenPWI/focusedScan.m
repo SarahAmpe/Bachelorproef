@@ -1,5 +1,5 @@
 function [intensity] = focusedScan(fmc, t, x, z, D, c, arrSetup)
-% FOCUSEDSCAN Calculates intensity of the plane B-scan image for each point in a grid
+% FOCUSEDSCAN Calculates intensity of the focused B-scan image for each point in a grid
 % INPUT: 
     % fmc      = full matrix of time domain signals
     % t        = time sequence of fullMat
@@ -23,7 +23,7 @@ for m = 1:length(x)
             xrx = subSetup(receive); % Receiver position
             time = (sqrt((xtx-x(m))^2 + z.^2) + sqrt((xrx-x(m))^2 + z.^2))./c;
             signal = permute(subMat(transmit, receive, :), [3 1 2]);
-            signal = envelope(signal); % Hilbert transform van huidige signaal
+            signal = envelope(signal); % Hilbert transform
             I = interp1(t,signal,time);
             intensity(:,m) = intensity(:,m) + I;
         end

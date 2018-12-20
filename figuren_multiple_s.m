@@ -46,7 +46,7 @@ intensityPlot(x,z,xx,zz,I,plotTitle,fileName)
 
 
 %% Testjes
-tt = linspace(-4,4,1024);
+tt = linspace(-10,10,1024);
 ftt = tfm_multiple(fmc,t,tt,5.5,z_in(1),c,arraySetup);
 figure
 plot(tt,ftt)
